@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CreatorFit AI - Brand Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&amp;family=JetBrains+Mono:wght@100..800&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        
+        :root {
+            --primary-hack: #c7f02d; /* Lime */
+            --secondary-hack: #ff71cf; /* Pink */
+            --bg-hack: #121409;
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background-color: var(--bg-hack);
+        }
+
+        .neo-card {
+            background: white;
+            border: 3px solid black;
+            border-radius: 24px;
+            box-shadow: 8px 8px 0px 0px rgba(0,0,0,1);
+            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .neo-card:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 12px 12px 0px 0px rgba(0,0,0,1);
+        }
+
+        .neo-card-lime {
+            background-color: var(--primary-hack);
+            color: black;
+        }
+
+        .neo-card-pink {
+            background-color: var(--secondary-hack);
+            color: black;
+        }
+
+        .neo-button {
+            border: 3px solid black;
+            box-shadow: 4px 4px 0px 0px rgba(0,0,0,1);
+            transition: all 0.1s active:translate-y-1 active:shadow-none;
+            border-radius: 9999px;
+            font-weight: 700;
+        }
+
+        .neo-button:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0px 0px rgba(0,0,0,1);
+        }
+
+        .neo-button:active {
+            transform: translate(2px, 2px);
+            box-shadow: 0px 0px 0px 0px rgba(0,0,0,1);
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: black;
+            border: 2px solid var(--primary-hack);
+            border-radius: 10px;
+        }
+
+        @keyframes widgetEntry {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .stagger-entry > * {
+            opacity: 0;
+            animation: widgetEntry 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary": "#c7f02d",
+                        "secondary": "#ff71cf",
+                        "on-surface": "#ffffff",
+                        "surface": "#121409",
+                        "surface-variant": "#1a1d11",
+                        "outline": "#000000",
+                        "background": "#121409"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0px",
+                        "lg": "12px",
+                        "xl": "24px",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "sidebar-width": "280px",
+                        "margin-desktop": "40px",
+                        "stack-lg": "32px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Space Grotesk"],
+                        "display": ["Space Grotesk"],
+                        "h1": ["Space Grotesk"],
+                        "h2": ["Space Grotesk"]
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background text-on-surface font-body-md overflow-hidden">
+<!-- STITCH_SHADER_START:ANIMATION_8 class="fixed inset-0 -z-10 w-full h-full" -->
+<div class="fixed inset-0 -z-10 w-full h-full" style="display:block;">
+<canvas id="shader-canvas-ANIMATION_8" style="display:block;width:100%;height:100%"></canvas>
+<script>
+(function() {
+  const canvas = document.getElementById('shader-canvas-ANIMATION_8');
+
+  // Sync the WebGL drawing-buffer size with the CSS-driven layout size.
+  // This fires on initial layout and whenever the element is resized.
+  function syncSize() {
+    const w = canvas.clientWidth  || 1280;
+    const h = canvas.clientHeight || 720;
+    if (canvas.width !== w || canvas.height !== h) {
+      canvas.width  = w;
+      canvas.height = h;
+    }
+  }
+  if (typeof ResizeObserver !== 'undefined') {
+    new ResizeObserver(syncSize).observe(canvas);
+  }
+  syncSize();
+
+  const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+  if (!gl) return;
+  const vs = `attribute vec2 a_position;
+varying vec2 v_texCoord;
+void main() {
+  v_texCoord = a_position * 0.5 + 0.5;
+  gl_Position = vec4(a_position, 0.0, 1.0);
+}`;
+  const fs = `precision highp float;
+varying vec2 v_texCoord;
+uniform float u_time;
+uniform vec2 u_resolution;
+
+void main() {
+    vec2 uv = v_texCoord;
+    
+    // Animate base colors
+    vec3 c1 = vec3(0.706, 0.541, 0.91); // Purple #B48AE8
+    vec3 c2 = vec3(0.788, 0.753, 0.902); // Lavender #C9C0E6
+    vec3 c3 = vec3(0.663, 0.784, 1.0); // Soft Blue #A9C8FF
+    vec3 bg = vec3(0.067, 0.067, 0.067); // Black #111111
+    
+    // Noise-like mesh movement
+    float n1 = sin(uv.x * 3.0 + u_time * 0.5) * cos(uv.y * 2.0 + u_time * 0.3);
+    float n2 = cos(uv.x * 2.0 - u_time * 0.4) * sin(uv.y * 3.5 + u_time * 0.6);
+    
+    vec3 color = mix(c1, c2, uv.x + n1 * 0.2);
+    color = mix(color, c3, uv.y + n2 * 0.2);
+    color = mix(bg, color, 0.4); // Subtle integration
+    
+    // Grid overlay
+    vec2 grid = fract(uv * 40.0);
+    float line = step(0.98, grid.x) + step(0.98, grid.y);
+    color += line * 0.03; // Very subtle grid
+    
+    gl_FragColor = vec4(color, 1.0);
+}`;
+  function cs(type, src) {
+    const s = gl.createShader(type);
+    gl.shaderSource(s, src);
+    gl.compileShader(s);
+    return s;
+  }
+  const prog = gl.createProgram();
+  gl.attachShader(prog, cs(gl.VERTEX_SHADER, vs));
+  gl.attachShader(prog, cs(gl.FRAGMENT_SHADER, fs));
+  gl.linkProgram(prog);
+  gl.useProgram(prog);
+  const buf = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, 1,1]), gl.STATIC_DRAW);
+  const pos = gl.getAttribLocation(prog, 'a_position');
+  gl.enableVertexAttribArray(pos);
+  gl.vertexAttribPointer(pos, 2, gl.FLOAT, false, 0, 0);
+  const uTime = gl.getUniformLocation(prog, 'u_time');
+  const uRes = gl.getUniformLocation(prog, 'u_resolution');
+  const uMouse = gl.getUniformLocation(prog, 'u_mouse');
+
+  // u_mouse is in pixel coordinates matching u_resolution (ShaderToy convention).
+  // Shaders that need normalized coords should use: u_mouse / u_resolution.
+  let mouse = { x: canvas.width / 2, y: canvas.height / 2 };
+  window.addEventListener('mousemove', (event) => {
+    const rect = canvas.getBoundingClientRect();
+    if (rect.width && rect.height) {
+      const nx = (event.clientX - rect.left) / rect.width;
+      const ny = 1.0 - (event.clientY - rect.top) / rect.height;
+      mouse.x = nx * canvas.width;
+      mouse.y = ny * canvas.height;
+    }
+  });
+
+  function render(t) {
+    if (typeof ResizeObserver === 'undefined') syncSize();
+    gl.viewport(0, 0, canvas.width, canvas.height);
+    if (uTime) gl.uniform1f(uTime, t * 0.001);
+    if (uRes) gl.uniform2f(uRes, canvas.width, canvas.height);
+    if (uMouse) gl.uniform2f(uMouse, mouse.x, mouse.y);
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    requestAnimationFrame(render);
+  }
+  render(0);
+})();
+</script>
+</div>
+<!-- STITCH_SHADER_END:ANIMATION_8 -->
+<!-- Side Navigation Shell -->
+<nav class="fixed left-0 top-0 h-full w-sidebar-width bg-surface border-r-4 border-black flex flex-col gap-4 py-8 z-50">
+<div class="px-8 mb-8">
+<h1 class="font-display text-3xl font-black text-primary uppercase tracking-tighter italic" style="-webkit-text-stroke: 1px black;">CreatorFit</h1>
+<div class="inline-block bg-black text-primary text-[10px] px-2 py-0.5 font-bold mt-1">HACK_V.01</div>
+</div>
+<div class="flex-1 px-4 space-y-2">
+<a class="flex items-center bg-primary text-black border-2 border-black font-black px-4 py-3 rounded-xl shadow-[4px_4px_0_0_rgba(0,0,0,1)] transition-all" href="#">
+<span class="material-symbols-outlined mr-3">grid_view</span>
+<span>DASHBOARD</span>
+</a>
+<a class="flex items-center text-white/70 hover:text-primary hover:bg-black/20 px-4 py-3 transition-all font-bold" href="#">
+<span class="material-symbols-outlined mr-3">auto_awesome</span>
+<span>FIT ENGINE</span>
+</a>
+<a class="flex items-center text-white/70 hover:text-primary hover:bg-black/20 px-4 py-3 transition-all font-bold" href="#">
+<span class="material-symbols-outlined mr-3">explore</span>
+<span>DISCOVER</span>
+</a>
+<a class="flex items-center text-white/70 hover:text-primary hover:bg-black/20 px-4 py-3 transition-all font-bold" href="#">
+<span class="material-symbols-outlined mr-3">list_alt</span>
+<span>REQUESTS</span>
+</a>
+<a class="flex items-center text-white/70 hover:text-primary hover:bg-black/20 px-4 py-3 transition-all font-bold" href="#">
+<span class="material-symbols-outlined mr-3">insights</span>
+<span>ANALYTICS</span>
+</a>
+</div>
+<div class="px-4 space-y-2 mt-auto pt-4">
+<button class="w-full flex items-center justify-center bg-primary text-black neo-button py-4 mb-4">
+<span class="material-symbols-outlined mr-2 font-black">add</span>
+            NEW ANALYSIS
+        </button>
+<a class="flex items-center text-white/60 hover:text-white px-4 py-2 text-sm font-bold" href="#">
+<span class="material-symbols-outlined mr-3">help</span>
+<span>HELP</span>
+</a>
+<a class="flex items-center text-red-400 hover:text-red-300 px-4 py-2 text-sm font-bold" href="#">
+<span class="material-symbols-outlined mr-3">logout</span>
+<span>SIGN OUT</span>
+</a>
+</div>
+</nav>
+<!-- Main Content Area -->
+<main class="ml-sidebar-width min-h-screen relative overflow-y-auto h-screen custom-scrollbar">
+<!-- Top Nav Shell -->
+<header class="fixed top-0 right-0 w-[calc(100%-280px)] h-20 bg-surface/90 border-b-4 border-black flex justify-between items-center px-10 z-40">
+<div class="flex items-center flex-1 max-w-xl">
+<div class="relative w-full">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-white/50">search</span>
+<input class="w-full bg-black/40 border-2 border-black rounded-full py-3 pl-12 pr-4 text-sm focus:ring-0 focus:border-primary transition-all outline-none text-white font-bold" placeholder="SEARCH CREATOR DATABASE..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-2">
+<button class="bg-black border-2 border-primary/20 hover:border-primary text-white p-2 rounded-full transition-all">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+</div>
+<div class="h-8 w-1 bg-black/40"></div>
+<div class="flex items-center gap-4">
+<div class="text-right">
+<p class="text-sm font-black text-white leading-none">ADMIN_ROOT</p>
+<p class="text-[10px] text-primary font-bold uppercase tracking-widest">Premium Level</p>
+</div>
+<div class="w-12 h-12 rounded-full border-2 border-primary overflow-hidden">
+<img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDc214xk0ULVC7BpKPKwBqW_zCIREwZ8FmALQ3s5zVFRxKMMS1SwOcKkIA1SddwebdZZ1UPhU2FMwDVzjCW-fX2qi-SiBXZcOqtZYTuc1tu4ye-Amwjm_TjmioluT26Gb4GmLaHIhkoEularYMC0ex6a0uTPSoZRbz5zBxD0lKM_kK5QgBdTeVdQ6N_fVxIVjDDRmsVd10aaqddZjFVm_5ua-5G5UCYubVqmlWLM3uC_BXl649vfoqgtrh9jB0JWGTcfkFtN1IDaW-2"/>
+</div>
+</div>
+</div>
+</header>
+<!-- Content Canvas -->
+<div class="mt-20 p-10 space-y-10 max-w-7xl mx-auto stagger-entry">
+<!-- Hero Greeting -->
+<div class="flex justify-between items-end" style="animation-delay: 0.1s;">
+<div>
+<h2 class="text-5xl font-black text-white uppercase tracking-tighter">System Access: <span class="text-primary italic">BRAND_X</span></h2>
+<p class="text-white/60 mt-4 text-xl font-bold">Engagement metrics up <span class="text-primary">+12.4%</span> across all nodes.</p>
+</div>
+<div class="flex gap-4">
+<button class="neo-button bg-black text-white px-6 py-3 text-sm flex items-center">
+<span class="material-symbols-outlined mr-2">calendar_today</span>
+                    LAST 30D
+                </button>
+<button class="neo-button bg-primary text-black px-6 py-3 text-sm flex items-center">
+<span class="material-symbols-outlined mr-2">download</span>
+                    EXPORT
+                </button>
+</div>
+</div>
+<!-- Stats Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8" style="animation-delay: 0.2s;">
+<div class="neo-card neo-card-lime p-8">
+<div class="flex justify-between items-start mb-6">
+<div class="p-3 bg-black text-primary rounded-xl">
+<span class="material-symbols-outlined">campaign</span>
+</div>
+<span class="bg-black text-primary text-[10px] font-black px-2 py-1">+4.2%</span>
+</div>
+<p class="text-black/60 font-black text-xs uppercase tracking-widest mb-1">Campaigns</p>
+<p class="text-6xl font-black italic">12</p>
+</div>
+<div class="neo-card neo-card-lime p-8">
+<div class="flex justify-between items-start mb-6">
+<div class="p-3 bg-black text-primary rounded-xl">
+<span class="material-symbols-outlined">groups</span>
+</div>
+<span class="bg-black text-primary text-[10px] font-black px-2 py-1">STABLE</span>
+</div>
+<p class="text-black/60 font-black text-xs uppercase tracking-widest mb-1">Evaluated</p>
+<p class="text-6xl font-black italic">482</p>
+</div>
+<div class="neo-card neo-card-lime p-8">
+<div class="flex justify-between items-start mb-6">
+<div class="p-3 bg-black text-primary rounded-xl">
+<span class="material-symbols-outlined">verified</span>
+</div>
+<span class="bg-black text-primary text-[10px] font-black px-2 py-1">PEAK</span>
+</div>
+<p class="text-black/60 font-black text-xs uppercase tracking-widest mb-1">Avg Fit</p>
+<p class="text-6xl font-black italic">92%</p>
+</div>
+<div class="neo-card neo-card-lime p-8">
+<div class="flex justify-between items-start mb-6">
+<div class="p-3 bg-black text-primary rounded-xl">
+<span class="material-symbols-outlined">trending_up</span>
+</div>
+<span class="bg-black text-primary text-[10px] font-black px-2 py-1">+84k</span>
+</div>
+<p class="text-black/60 font-black text-xs uppercase tracking-widest mb-1">Est Reach</p>
+<p class="text-6xl font-black italic">2.4M</p>
+</div>
+</div>
+<!-- Kanban Section -->
+<section class="space-y-8" style="animation-delay: 0.3s;">
+<div class="flex items-center justify-between">
+<h3 class="text-3xl font-black text-white uppercase italic">Active Streams</h3>
+<div class="flex gap-2">
+<button class="neo-button bg-black text-white p-3"><span class="material-symbols-outlined">filter_list</span></button>
+<button class="neo-button bg-black text-white p-3"><span class="material-symbols-outlined">more_vert</span></button>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+<!-- Pending Column -->
+<div class="space-y-6">
+<div class="flex items-center px-2">
+<span class="w-4 h-4 bg-yellow-400 border-2 border-black rounded-full mr-3"></span>
+<span class="font-black text-sm uppercase tracking-widest">PENDING (2)</span>
+</div>
+<div class="space-y-4">
+<div class="neo-card neo-card-pink p-6">
+<div class="flex items-center gap-4 mb-4">
+<img class="w-12 h-12 rounded-full border-2 border-black" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAu7aam2KMas5v_eSUUuwlwi8uBlX--rucX3OI4keNGeNsa2tlaIwcrgXJ-LPz2J1DL6AxplSMYgRZli4h-ik6dr7MQq6XH6zV_1dUFAFqt3_ISWvhzbcSjRhbhwhUgCyo0aFWMpGX5OsOQlVbqH92xt8REt-CYR7RCw_DfBi1QX8mryMHb3SowDKkIiejqYwKcoNRFK7YoB_0GnAa2HPCGQHzgkR_sQzS7VOKPapsyLt3DaiqnYsgEArtfLRSZebc1jm2mpq5e_9I1"/>
+<div>
+<h4 class="font-black text-sm">ALEX RIVERA</h4>
+<p class="text-[10px] font-bold text-black/60 uppercase">Tech_Node</p>
+</div>
+<div class="ml-auto bg-black text-white text-xs px-2 py-1 font-mono font-black">94</div>
+</div>
+<p class="text-sm font-bold line-clamp-2 leading-tight">Love the aesthetic. Available for sync...</p>
+</div>
+<div class="neo-card neo-card-pink p-6">
+<div class="flex items-center gap-4 mb-4">
+<img class="w-12 h-12 rounded-full border-2 border-black" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA4mLJE5FHbUNCGJOTu4OGBzDXlQ4QE0k5WsnHhBUhr-M8rOrjTBWcPLdL8HGYB8GMZ2feaN1aYWfqflUQGvqEv5ENyCAyt1lDKgeIbXGQU8wKrDVqu96kgiWYDkxQRXMEvbp3C6jArw4p63UkzLjPHVzD_I7_iz2J4k5K8PNe39U1fHzWr9FHZ4kNm-LjMhPN3U7tBpsjQ9_UrxctaA7FRBt9ck3aoPKpV3gBOlxXDbgHybV1BTdYTsfHKITmxypnckAjqqk4MflXh"/>
+<div>
+<h4 class="font-black text-sm">ELENA K.</h4>
+<p class="text-[10px] font-bold text-black/60 uppercase">Wellness</p>
+</div>
+<div class="ml-auto bg-black text-white text-xs px-2 py-1 font-mono font-black">88</div>
+</div>
+<p class="text-sm font-bold line-clamp-2 leading-tight">Ready for deployment of next drop.</p>
+</div>
+</div>
+</div>
+<!-- Viewed -->
+<div class="space-y-6">
+<div class="flex items-center px-2">
+<span class="w-4 h-4 bg-blue-400 border-2 border-black rounded-full mr-3"></span>
+<span class="font-black text-sm uppercase tracking-widest">VIEWED (1)</span>
+</div>
+<div class="neo-card neo-card-pink p-6">
+<div class="flex items-center gap-4 mb-4">
+<img class="w-12 h-12 rounded-full border-2 border-black" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDTYq2prllJjNbyfJg0Yc0KPTRidB7qMBfnE9d6AhFA-Ydrnayis6ohTkERGaW-jJ1Q5XEpzZn9BP3QjvEuHpSBVd5DP-iAOLWqMRk-wn1WjOYL1FoDfljQ1lLwnaoWI4xPH_4l-ST4Jz_UTGQc8hPqR0_E4TMeyIlENSjf-TC6EAsLJN1k1qF69hM8Qs-B_yaHHgRlxpEDRTcVfbq6FCC_4OtsM70fICzW4SQOWc_iFbzzuvqF8io6yKwQY934OnhHsdZ5nmf7KOX_"/>
+<div>
+<h4 class="font-black text-sm">JORDAN SMITH</h4>
+<p class="text-[10px] font-bold text-black/60 uppercase">Streetwear</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Accepted -->
+<div class="space-y-6">
+<div class="flex items-center px-2">
+<span class="w-4 h-4 bg-primary border-2 border-black rounded-full mr-3"></span>
+<span class="font-black text-sm uppercase tracking-widest">ACCEPTED (3)</span>
+</div>
+<div class="neo-card neo-card-lime p-6">
+<div class="flex items-center gap-4 mb-4">
+<img class="w-12 h-12 rounded-full border-2 border-black" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDUbuSH9Bt_o0viT1GGv3elQUY_1kOpF61QH4oCBR_nGyat7uuIUw-5CBA5ds0vOK9Lez-eLdi31GNweHYf3s1fUGXgTJQwkOHmDSYTALmWIjQcYBesMZPfpa1Rphc4mDy9rYoovAKaKcCCKMxxL9nZaqEzf5rbHQ_lTMziOlOGUSaNAnrCsxrO_5_TqUZ-JOPF1QqTFU9TkxQg_UXtPpIpD0pwRtl7FI-HTNVJS2AQI7oKq9GrhZwC7eKhcg8hDWo4nnmvftoXvaJ8"/>
+<div>
+<h4 class="font-black text-sm">SARAH OH</h4>
+<p class="text-[10px] font-bold text-black/60 uppercase">Home_Design</p>
+</div>
+</div>
+<p class="text-[10px] bg-black text-primary inline-block px-2 py-1 font-black">CONTRACT_LOCKED</p>
+</div>
+</div>
+<!-- Declined -->
+<div class="space-y-6">
+<div class="flex items-center px-2">
+<span class="w-4 h-4 bg-red-500 border-2 border-black rounded-full mr-3"></span>
+<span class="font-black text-sm uppercase tracking-widest">REJECTED (0)</span>
+</div>
+<div class="h-40 border-4 border-dashed border-black/40 rounded-3xl flex items-center justify-center">
+<p class="text-white/20 font-black uppercase text-xs italic">Clear_Stream</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Table Section -->
+<section class="space-y-8 pb-20" style="animation-delay: 0.4s;">
+<div class="flex items-center justify-between">
+<h3 class="text-3xl font-black text-white uppercase italic">Creator Matrix</h3>
+<button class="neo-button bg-black text-primary px-6 py-2 text-sm uppercase font-black">Full_Report</button>
+</div>
+<div class="neo-card bg-black p-4">
+<table class="w-full text-left">
+<thead>
+<tr class="border-b-4 border-primary">
+<th class="p-6 font-black uppercase text-primary tracking-widest">Creator</th>
+<th class="p-6 font-black uppercase text-primary tracking-widest">Engagement</th>
+<th class="p-6 font-black uppercase text-primary tracking-widest">Alignment</th>
+<th class="p-6 font-black uppercase text-primary tracking-widest text-right">F_Score</th>
+</tr>
+</thead>
+<tbody class="divide-y-2 divide-white/5">
+<tr class="bg-primary/10">
+<td class="p-6">
+<div class="flex items-center gap-4">
+<div class="relative">
+<img class="w-12 h-12 rounded-full border-2 border-primary" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAeAEFyEHlNOhU9ZiDiIIBwQTnNmGhh0jfgA5ZxfQ6_Z_yoDJY25fiztfF_Ls4vsj5Hfm5RCHsqMSehJNs5PxQPumTZUB6wZCUknFe83bLzO7I6ZVj1zIHKaUOMs9h0nT3_jSznnDo6WEzBC6VvIxAQjIeFn2qyJ-oBFuYTtXsszGlWUOTCIanF7tai-lw22p03itsS6hpY8J98sBZMR3G0UTTPUEtg6DCMx3ZpppvY5KagPYcl0tOG2CVD3pjuvw2pmjEZgvJGNyJl"/>
+<div class="absolute -top-2 -right-2 bg-black text-primary text-[8px] font-black px-1 border border-primary">NODE_1</div>
+</div>
+<div>
+<p class="font-black text-white">MARCUS CHEN</p>
+<p class="text-[10px] text-primary/70">TECH_EXPERT</p>
+</div>
+</div>
+</td>
+<td class="p-6">
+<div class="flex items-center gap-3">
+<span class="font-mono font-black text-primary">6.8%</span>
+<div class="w-20 h-2 bg-black border border-primary/20">
+<div class="h-full bg-primary" style="width: 80%"></div>
+</div>
+</div>
+</td>
+<td class="p-6 text-white font-bold">94%_SYNC</td>
+<td class="p-6 text-right font-mono font-black text-3xl text-primary italic">98</td>
+</tr>
+<tr class="hover:bg-white/5 transition-colors">
+<td class="p-6">
+<div class="flex items-center gap-4">
+<img class="w-12 h-12 rounded-full border-2 border-black" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC_V6XqbCuRPnnSJeRKw-joeUOEcVXfy7bZPOkbVKx-3FGuTFBw3I1Jb-iTmBN477EbS928L0wNMfH71BwU8Om8Dx-UUrge3L5OCwx5k-W_lASkA0wY3I8SlsjRAUwAC2iTpjEP4L4qiSA26fTCY_wFamQaf6DYXacC6zLl8BH-zXiyguQN0xJuz9SptWPrkWdw3VHJ8jf7Q0MAcwKSWMB4UBTV2a1bo2GPF0fe6QKVpCbButQ0BTz8fbYOes89k0SEmAIy_DF-Qat0"/>
+<div>
+<p class="font-black text-white">LUNA MENDEZ</p>
+<p class="text-[10px] text-white/40">ADVENTURE</p>
+</div>
+</div>
+</td>
+<td class="p-6">
+<div class="flex items-center gap-3">
+<span class="font-mono font-bold text-white/60">4.2%</span>
+<div class="w-20 h-2 bg-black border border-white/10">
+<div class="h-full bg-primary/40" style="width: 50%"></div>
+</div>
+</div>
+</td>
+<td class="p-6 text-white/60 font-bold">72%_SYNC</td>
+<td class="p-6 text-right font-mono font-black text-3xl text-white/40">84</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</div>
+</main>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Staggered entry animation delay calculation
+        const children = document.querySelectorAll('.stagger-entry > *');
+        children.forEach((child, index) => {
+            child.style.animationDelay = `${index * 0.15}s`;
+        });
+
+        // Add micro-interaction glow to neo-cards
+        const cards = document.querySelectorAll('.neo-card');
+        cards.forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.filter = 'drop-shadow(0 0 15px rgba(199, 240, 45, 0.3))';
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.filter = 'none';
+            });
+        });
+    });
+</script>
+</body></html>

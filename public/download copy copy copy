@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CreatorFit AI - Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script src="https://unpkg.com/framer-motion@10.16.4/dist/framer-motion.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&amp;family=JetBrains+Mono:wght@450&amp;display=swap" rel="stylesheet"/>
+<style>
+        body {
+            background-color: #121409;
+            color: #dae2fd;
+            font-family: 'Space Grotesk', sans-serif;
+            overflow-x: hidden;
+        }
+
+        .brutal-card {
+            background: #1a1d11;
+            border: 3px solid #000000;
+            border-radius: 24px;
+            box-shadow: 8px 8px 0px 0px #000000;
+            transition: transform 0.2s ease;
+        }
+
+        .brutal-card:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 10px 10px 0px 0px #000000;
+        }
+
+        .brutal-btn {
+            border: 3px solid #000000;
+            box-shadow: 4px 4px 0px 0px #000000;
+            border-radius: 9999px;
+            font-weight: 700;
+            transition: all 0.1s ease;
+        }
+
+        .brutal-btn:active {
+            box-shadow: 0px 0px 0px 0px #000000;
+            transform: translate(4px, 4px);
+        }
+
+        .bg-lime { background-color: #c7f02d; color: #000000; }
+        .bg-lavender { background-color: #C9C0E6; color: #000000; }
+        .bg-pink { background-color: #ffb7e9; color: #000000; }
+        .bg-black-brutal { background-color: #000000; color: #ffffff; }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        .active-tab {
+            background: rgba(199, 240, 45, 0.1);
+            border: 3px solid #000000;
+            box-shadow: 4px 4px 0px 0px #000000;
+            border-radius: 12px;
+            color: #c7f02d !important;
+        }
+
+        @keyframes countUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-count {
+            animation: countUp 0.5s ease-out forwards;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary": "#c7f02d",
+                        "on-surface": "#dae2fd",
+                        "surface": "#121409",
+                        "surface-container": "#1a1d11",
+                        "outline": "#908fa0"
+                    },
+                    "fontFamily": {
+                        "display": ["Space Grotesk"],
+                        "body-md": ["Space Grotesk"],
+                        "mono": ["JetBrains Mono"]
+                    },
+                    "spacing": {
+                        "sidebar-width": "260px",
+                        "container-max": "1440px"
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="font-body-md text-on-surface selection:bg-primary/30">
+<!-- STITCH_SHADER_START:ANIMATION_8 class="fixed inset-0 -z-10 w-full h-full opacity-40" -->
+<div class="fixed inset-0 -z-10 w-full h-full opacity-40" style="display:block;">
+<canvas id="shader-canvas-ANIMATION_8" style="display:block;width:100%;height:100%"></canvas>
+<script>
+(function() {
+  const canvas = document.getElementById('shader-canvas-ANIMATION_8');
+
+  // Sync the WebGL drawing-buffer size with the CSS-driven layout size.
+  // This fires on initial layout and whenever the element is resized.
+  function syncSize() {
+    const w = canvas.clientWidth  || 1280;
+    const h = canvas.clientHeight || 720;
+    if (canvas.width !== w || canvas.height !== h) {
+      canvas.width  = w;
+      canvas.height = h;
+    }
+  }
+  if (typeof ResizeObserver !== 'undefined') {
+    new ResizeObserver(syncSize).observe(canvas);
+  }
+  syncSize();
+
+  const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+  if (!gl) return;
+  const vs = `attribute vec2 a_position;
+varying vec2 v_texCoord;
+void main() {
+  v_texCoord = a_position * 0.5 + 0.5;
+  gl_Position = vec4(a_position, 0.0, 1.0);
+}`;
+  const fs = `precision highp float;
+varying vec2 v_texCoord;
+uniform float u_time;
+uniform vec2 u_resolution;
+
+void main() {
+    vec2 uv = v_texCoord;
+    
+    // Animate base colors
+    vec3 c1 = vec3(0.706, 0.541, 0.91); // Purple #B48AE8
+    vec3 c2 = vec3(0.788, 0.753, 0.902); // Lavender #C9C0E6
+    vec3 c3 = vec3(0.663, 0.784, 1.0); // Soft Blue #A9C8FF
+    vec3 bg = vec3(0.067, 0.067, 0.067); // Black #111111
+    
+    // Noise-like mesh movement
+    float n1 = sin(uv.x * 3.0 + u_time * 0.5) * cos(uv.y * 2.0 + u_time * 0.3);
+    float n2 = cos(uv.x * 2.0 - u_time * 0.4) * sin(uv.y * 3.5 + u_time * 0.6);
+    
+    vec3 color = mix(c1, c2, uv.x + n1 * 0.2);
+    color = mix(color, c3, uv.y + n2 * 0.2);
+    color = mix(bg, color, 0.4); // Subtle integration
+    
+    // Grid overlay
+    vec2 grid = fract(uv * 40.0);
+    float line = step(0.98, grid.x) + step(0.98, grid.y);
+    color += line * 0.03; // Very subtle grid
+    
+    gl_FragColor = vec4(color, 1.0);
+}`;
+  function cs(type, src) {
+    const s = gl.createShader(type);
+    gl.shaderSource(s, src);
+    gl.compileShader(s);
+    return s;
+  }
+  const prog = gl.createProgram();
+  gl.attachShader(prog, cs(gl.VERTEX_SHADER, vs));
+  gl.attachShader(prog, cs(gl.FRAGMENT_SHADER, fs));
+  gl.linkProgram(prog);
+  gl.useProgram(prog);
+  const buf = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, 1,1]), gl.STATIC_DRAW);
+  const pos = gl.getAttribLocation(prog, 'a_position');
+  gl.enableVertexAttribArray(pos);
+  gl.vertexAttribPointer(pos, 2, gl.FLOAT, false, 0, 0);
+  const uTime = gl.getUniformLocation(prog, 'u_time');
+  const uRes = gl.getUniformLocation(prog, 'u_resolution');
+  const uMouse = gl.getUniformLocation(prog, 'u_mouse');
+
+  // u_mouse is in pixel coordinates matching u_resolution (ShaderToy convention).
+  // Shaders that need normalized coords should use: u_mouse / u_resolution.
+  let mouse = { x: canvas.width / 2, y: canvas.height / 2 };
+  window.addEventListener('mousemove', (event) => {
+    const rect = canvas.getBoundingClientRect();
+    if (rect.width && rect.height) {
+      const nx = (event.clientX - rect.left) / rect.width;
+      const ny = 1.0 - (event.clientY - rect.top) / rect.height;
+      mouse.x = nx * canvas.width;
+      mouse.y = ny * canvas.height;
+    }
+  });
+
+  function render(t) {
+    if (typeof ResizeObserver === 'undefined') syncSize();
+    gl.viewport(0, 0, canvas.width, canvas.height);
+    if (uTime) gl.uniform1f(uTime, t * 0.001);
+    if (uRes) gl.uniform2f(uRes, canvas.width, canvas.height);
+    if (uMouse) gl.uniform2f(uMouse, mouse.x, mouse.y);
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    requestAnimationFrame(render);
+  }
+  render(0);
+})();
+</script>
+</div>
+<!-- STITCH_SHADER_END:ANIMATION_8 -->
+<!-- Sidebar Component -->
+<aside class="fixed left-0 top-0 h-full w-sidebar-width bg-surface/80 backdrop-blur-xl border-r-4 border-black z-50 flex flex-col py-8">
+<div class="px-6 mb-10">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-2xl bg-primary border-3 border-black shadow-[4px_4px_0_0_#000000] flex items-center justify-center">
+<span class="material-symbols-outlined text-black text-[28px]" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+</div>
+<div>
+<h1 class="font-display text-2xl font-bold text-primary tracking-tight leading-none uppercase">CreatorFit</h1>
+<p class="text-[10px] uppercase tracking-widest text-primary/60 font-bold">HackFluence v2</p>
+</div>
+</div>
+</div>
+<nav class="flex-1 flex flex-col gap-2 px-4">
+<a class="active-tab px-4 py-3 flex items-center gap-3 font-bold transition-all" href="#">
+<span class="material-symbols-outlined">grid_view</span>
+<span>Dashboard</span>
+</a>
+<a class="text-on-surface/60 hover:text-primary hover:bg-white/5 px-4 py-3 rounded-xl transition-all flex items-center gap-3" href="#">
+<span class="material-symbols-outlined">auto_awesome</span>
+<span>Fit Engine</span>
+</a>
+<a class="text-on-surface/60 hover:text-primary hover:bg-white/5 px-4 py-3 rounded-xl transition-all flex items-center gap-3" href="#">
+<span class="material-symbols-outlined">explore</span>
+<span>Discover</span>
+</a>
+<a class="text-on-surface/60 hover:text-primary hover:bg-white/5 px-4 py-3 rounded-xl transition-all flex items-center gap-3" href="#">
+<span class="material-symbols-outlined">list_alt</span>
+<span>Requests</span>
+</a>
+</nav>
+<div class="px-4 mt-auto space-y-4 pt-6">
+<button class="w-full brutal-btn bg-lime py-4 flex items-center justify-center gap-2 hover:brightness-110 active:scale-95 transition-all">
+<span class="material-symbols-outlined font-bold">add</span>
+            NEW ANALYSIS
+        </button>
+<div class="border-t-2 border-black pt-4">
+<a class="text-on-surface/60 hover:text-on-surface px-4 py-2 transition-all flex items-center gap-3 text-sm" href="#">
+<span class="material-symbols-outlined text-[20px]">help</span>
+                Help Center
+            </a>
+<a class="text-pink/80 hover:text-pink px-4 py-2 transition-all flex items-center gap-3 text-sm" href="#">
+<span class="material-symbols-outlined text-[20px]">logout</span>
+                Sign Out
+            </a>
+</div>
+</div>
+</aside>
+<!-- Top Navbar -->
+<header class="fixed top-0 right-0 w-[calc(100%-260px)] h-20 bg-surface/60 backdrop-blur-md border-b-4 border-black z-40 flex justify-between items-center px-10">
+<div class="relative w-96">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-primary font-bold">search</span>
+<input class="w-full bg-surface-container border-3 border-black rounded-full py-2 pl-12 pr-4 text-sm focus:outline-none focus:ring-4 focus:ring-primary/30 transition-all placeholder:text-on-surface/30" placeholder="Search brands, metrics..." type="text"/>
+</div>
+<div class="flex items-center gap-6">
+<button class="bg-surface-container border-3 border-black rounded-full p-2 text-primary hover:bg-primary hover:text-black transition-all">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<div class="flex items-center gap-4 bg-black/20 p-1 pr-4 rounded-full border-3 border-black">
+<img class="w-10 h-10 rounded-full border-2 border-primary object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAsl6oqHJA5QTo39561LQg3z2l5CmpLpUvvI0Pry_A77pDXwegYuePfpPpwCmh69NxI3IDlL8wcSuOYBx6tmR30fDAQ2xnejMx46cbIigcyigqbjOaKekGiHV9j5BMku5hcOTFZcTkn40U2zFOKe30wG85AdBDGBXFvYsm7xHJXoY7gkW9PHFZgciJ5ftjnWQipUrkAdt6W_9sii8Pbklq-g1rPwV4QvB5oELXm1PRVfQs39mvePGHxfN6n-9UTLkuLLScK_iOLP4db"/>
+<div class="leading-none">
+<p class="text-sm font-bold">Alex Rivers</p>
+<p class="text-[10px] text-primary uppercase font-black">Pro Creator</p>
+</div>
+</div>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="ml-sidebar-width pt-28 px-10 pb-16 max-w-container-max mx-auto">
+<!-- Header -->
+<div class="mb-12" id="hero-section">
+<h2 class="font-display text-5xl font-black tracking-tight mb-3 uppercase italic text-primary">Welcome back, Creator</h2>
+<p class="text-xl text-on-surface/70 font-medium">Performance snapshot for the last 30 days.</p>
+</div>
+<!-- Stats Grid -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12" id="stats-grid">
+<div class="brutal-card p-6 bg-surface-container">
+<div class="flex justify-between items-start mb-4">
+<div class="bg-lime p-2 rounded-xl border-2 border-black shadow-[2px_2px_0_0_#000000]">
+<span class="material-symbols-outlined font-bold">group</span>
+</div>
+<span class="text-lime text-sm font-black">+12%</span>
+</div>
+<p class="text-on-surface/40 text-[10px] font-black uppercase tracking-widest mb-1">Subscribers</p>
+<h3 class="text-3xl font-black font-mono" data-count="1.2">1.2M</h3>
+</div>
+<div class="brutal-card p-6 bg-surface-container">
+<div class="flex justify-between items-start mb-4">
+<div class="bg-lavender p-2 rounded-xl border-2 border-black shadow-[2px_2px_0_0_#000000]">
+<span class="material-symbols-outlined font-bold">visibility</span>
+</div>
+<span class="text-lime text-sm font-black">+5.4%</span>
+</div>
+<p class="text-on-surface/40 text-[10px] font-black uppercase tracking-widest mb-1">Avg Views</p>
+<h3 class="text-3xl font-black font-mono" data-count="342">342K</h3>
+</div>
+<div class="brutal-card p-6 bg-surface-container">
+<div class="flex justify-between items-start mb-4">
+<div class="bg-pink p-2 rounded-xl border-2 border-black shadow-[2px_2px_0_0_#000000]">
+<span class="material-symbols-outlined font-bold">favorite</span>
+</div>
+<span class="text-on-surface/40 text-sm font-black">0.0%</span>
+</div>
+<p class="text-on-surface/40 text-[10px] font-black uppercase tracking-widest mb-1">Engagement</p>
+<h3 class="text-3xl font-black font-mono" data-count="4.8">4.8%</h3>
+</div>
+<div class="brutal-card p-6 bg-surface-container">
+<div class="flex justify-between items-start mb-4">
+<div class="bg-lime p-2 rounded-xl border-2 border-black shadow-[2px_2px_0_0_#000000]">
+<span class="material-symbols-outlined font-bold">handshake</span>
+</div>
+<span class="text-lime text-sm font-black">+2</span>
+</div>
+<p class="text-on-surface/40 text-[10px] font-black uppercase tracking-widest mb-1">Matches</p>
+<h3 class="text-3xl font-black font-mono" data-count="28">28</h3>
+</div>
+</div>
+<!-- Main Content Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
+<!-- AI Profile Analysis -->
+<div class="lg:col-span-2 brutal-card p-8 bg-surface-container relative overflow-hidden">
+<div class="absolute top-0 right-0 w-32 h-32 bg-primary/10 -rotate-45 translate-x-12 -translate-y-12 border-b-4 border-black"></div>
+<div class="flex items-center gap-3 mb-8">
+<div class="px-4 py-1 rounded-full bg-lime border-2 border-black text-[10px] font-black uppercase tracking-widest shadow-[2px_2px_0_0_#000000]">AI INSIGHTS</div>
+<span class="text-on-surface/30 text-xs font-bold">Refreshed 2h ago</span>
+</div>
+<h2 class="text-4xl font-black uppercase italic mb-10 text-primary">AI Profile Analysis</h2>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<div class="brutal-card p-4 bg-pink/5 border-pink/20 hover:bg-pink/10">
+<label class="text-[10px] font-black uppercase text-pink mb-2 block tracking-widest">Core Niche</label>
+<div class="flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined text-pink font-bold">memory</span>
+<span class="text-xl font-bold">Technology</span>
+</div>
+<p class="text-xs text-on-surface/50 leading-relaxed">High-end hardware and software automation focus.</p>
+</div>
+<div class="brutal-card p-4 bg-lime/5 border-lime/20 hover:bg-lime/10">
+<label class="text-[10px] font-black uppercase text-lime mb-2 block tracking-widest">Audience</label>
+<div class="flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined text-lime font-bold">analytics</span>
+<span class="text-xl font-bold">18-34</span>
+</div>
+<p class="text-xs text-on-surface/50 leading-relaxed">Gen Z and Millennial tech early adopters.</p>
+</div>
+<div class="brutal-card p-4 bg-lavender/5 border-lavender/20 hover:bg-lavender/10">
+<label class="text-[10px] font-black uppercase text-lavender mb-2 block tracking-widest">Tone</label>
+<div class="flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined text-lavender font-bold">school</span>
+<span class="text-xl font-bold">Expert</span>
+</div>
+<p class="text-xs text-on-surface/50 leading-relaxed">Authoritative, clear and technical depth.</p>
+</div>
+</div>
+<div class="mt-12 p-8 brutal-card bg-black shadow-none border-dashed">
+<div class="flex justify-between items-center mb-6">
+<h4 class="font-black text-lime italic uppercase flex items-center gap-2">
+<span class="material-symbols-outlined font-bold">auto_graph</span>
+                        Growth Potential
+                    </h4>
+<span class="text-2xl font-black font-mono text-lime">92%</span>
+</div>
+<div class="w-full bg-white/10 h-6 border-3 border-black rounded-full p-1">
+<div class="bg-lime h-full rounded-full transition-all duration-1000 ease-out" style="width: 92%"></div>
+</div>
+</div>
+</div>
+<!-- Fit Check Tool -->
+<div class="brutal-card p-8 bg-surface-container flex flex-col">
+<div class="flex items-center gap-3 mb-8">
+<span class="material-symbols-outlined text-primary text-3xl font-bold">bolt</span>
+<h3 class="text-3xl font-black uppercase italic">Fit Check</h3>
+</div>
+<p class="text-sm text-on-surface/60 mb-8 font-medium">Predict campaign compatibility with AI brand-syncing.</p>
+<div class="space-y-6 flex-1">
+<input class="w-full bg-black/40 border-3 border-black rounded-2xl py-4 px-6 text-sm focus:outline-none focus:ring-4 focus:ring-primary/30 transition-all placeholder:text-on-surface/30 font-bold" placeholder="BRAND URL (e.g. linear.app)" type="text"/>
+<button class="w-full brutal-btn bg-lime py-4 text-black uppercase tracking-widest hover:translate-y-[-4px] active:scale-95" id="analyze-btn">
+                    ANALYZE FIT
+                </button>
+<div class="mt-8 pt-8 border-t-4 border-black border-dotted">
+<div class="flex items-center gap-4 mb-6">
+<div class="w-14 h-14 rounded-2xl bg-black border-3 border-black shadow-[4px_4px_0_0_#000000] flex items-center justify-center overflow-hidden">
+<span class="material-symbols-outlined text-primary text-3xl font-bold">domain</span>
+</div>
+<div>
+<h4 class="font-black text-lg">Linear</h4>
+<p class="text-[10px] text-primary uppercase font-bold tracking-widest">SaaS / Productivity</p>
+</div>
+</div>
+<div class="space-y-4">
+<div class="flex justify-between items-center bg-black/20 p-3 rounded-xl border-2 border-black">
+<span class="text-xs font-bold uppercase opacity-60">Alignment</span>
+<span class="text-xs text-lime font-black">EXCELLENT</span>
+</div>
+<div class="flex justify-between items-center bg-black/20 p-3 rounded-xl border-2 border-black">
+<span class="text-xs font-bold uppercase opacity-60">Est. ROI</span>
+<span class="text-xs text-lime font-black">3.4X</span>
+</div>
+<div class="mt-6 p-6 rounded-2xl bg-lime border-3 border-black shadow-[8px_8px_0_0_#000000] text-center" id="fit-score-card">
+<p class="text-[10px] font-black uppercase tracking-[0.2em] mb-1">AI FIT SCORE</p>
+<span class="text-5xl font-black font-mono" id="fit-score-value">94</span>
+<span class="text-xl font-black">/100</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Discover Brands -->
+<div class="mt-20">
+<div class="flex justify-between items-end mb-10 border-b-4 border-black pb-4">
+<div>
+<h3 class="text-4xl font-black uppercase italic text-primary">Discover Brands</h3>
+<p class="text-on-surface/60 font-bold">AI curated matches for your unique profile.</p>
+</div>
+<button class="brutal-btn bg-black-brutal text-white px-6 py-3 text-xs uppercase tracking-widest hover:bg-primary hover:text-black">
+                View All
+            </button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8" id="brands-grid">
+<!-- Brand 1 -->
+<div class="brutal-card p-6 bg-surface-container group">
+<div class="flex justify-between items-start mb-8">
+<div class="w-14 h-14 rounded-2xl bg-black border-3 border-black shadow-[4px_4px_0_0_#c7f02d] flex items-center justify-center">
+<span class="material-symbols-outlined text-white text-3xl" style="font-variation-settings: 'FILL' 1;">code</span>
+</div>
+<div class="bg-lime px-3 py-1 rounded-full border-2 border-black text-[10px] font-black shadow-[2px_2px_0_0_#000000]">98 FIT</div>
+</div>
+<h4 class="text-2xl font-black italic uppercase mb-1">Vercel</h4>
+<p class="text-xs text-on-surface/50 font-bold mb-6">Frontend Cloud</p>
+<div class="flex justify-between items-center pt-4 border-t-3 border-black border-dotted">
+<span class="text-[10px] font-black uppercase opacity-40">Budget</span>
+<span class="text-sm font-mono font-black text-lime">$5k-$15k</span>
+</div>
+</div>
+<!-- Brand 2 -->
+<div class="brutal-card p-6 bg-surface-container group">
+<div class="flex justify-between items-start mb-8">
+<div class="w-14 h-14 rounded-2xl bg-[#5865F2] border-3 border-black shadow-[4px_4px_0_0_#000000] flex items-center justify-center">
+<span class="material-symbols-outlined text-white text-3xl" style="font-variation-settings: 'FILL' 1;">forum</span>
+</div>
+<div class="bg-lime px-3 py-1 rounded-full border-2 border-black text-[10px] font-black shadow-[2px_2px_0_0_#000000]">92 FIT</div>
+</div>
+<h4 class="text-2xl font-black italic uppercase mb-1">Discord</h4>
+<p class="text-xs text-on-surface/50 font-bold mb-6">Social Platform</p>
+<div class="flex justify-between items-center pt-4 border-t-3 border-black border-dotted">
+<span class="text-[10px] font-black uppercase opacity-40">Budget</span>
+<span class="text-sm font-mono font-black text-lime">$10k-$25k</span>
+</div>
+</div>
+<!-- Brand 3 -->
+<div class="brutal-card p-6 bg-surface-container group">
+<div class="flex justify-between items-start mb-8">
+<div class="w-14 h-14 rounded-2xl bg-black border-3 border-black shadow-[4px_4px_0_0_#C9C0E6] flex items-center justify-center">
+<span class="material-symbols-outlined text-white text-3xl" style="font-variation-settings: 'FILL' 1;">terminal</span>
+</div>
+<div class="bg-lime px-3 py-1 rounded-full border-2 border-black text-[10px] font-black shadow-[2px_2px_0_0_#000000]">87 FIT</div>
+</div>
+<h4 class="text-2xl font-black italic uppercase mb-1">Warp</h4>
+<p class="text-xs text-on-surface/50 font-bold mb-6">Modern Terminal</p>
+<div class="flex justify-between items-center pt-4 border-t-3 border-black border-dotted">
+<span class="text-[10px] font-black uppercase opacity-40">Budget</span>
+<span class="text-sm font-mono font-black text-lime">$3k-$8k</span>
+</div>
+</div>
+<!-- Brand 4 -->
+<div class="brutal-card p-6 bg-surface-container group border-pink/30">
+<div class="flex justify-between items-start mb-8">
+<div class="w-14 h-14 rounded-2xl bg-[#7C3AED] border-3 border-black shadow-[4px_4px_0_0_#000000] flex items-center justify-center">
+<span class="material-symbols-outlined text-white text-3xl" style="font-variation-settings: 'FILL' 1;">edit_square</span>
+</div>
+<div class="bg-pink px-3 py-1 rounded-full border-2 border-black text-[10px] font-black shadow-[2px_2px_0_0_#000000]">78 FIT</div>
+</div>
+<h4 class="text-2xl font-black italic uppercase mb-1 text-pink">Raycast</h4>
+<p class="text-xs text-on-surface/50 font-bold mb-6">Productivity</p>
+<div class="flex justify-between items-center pt-4 border-t-3 border-black border-dotted">
+<span class="text-[10px] font-black uppercase opacity-40">Budget</span>
+<span class="text-sm font-mono font-black text-pink">$2k-$6k</span>
+</div>
+</div>
+</div>
+</div>
+</main>
+<script>
+    // Framer Motion like animations using basic GSAP-like logic for pure JS env if Framer isn't fully available
+    // Here we use native Intersection Observer for staggered entry
+    
+    const observerOptions = { threshold: 0.1 };
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('animate-count');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+
+    // Title reveal animation
+    const heroTitle = document.querySelector('#hero-section h2');
+    heroTitle.style.opacity = '0';
+    heroTitle.style.transform = 'translateY(20px)';
+    setTimeout(() => {
+        heroTitle.style.transition = 'all 0.8s cubic-bezier(0.16, 1, 0.3, 1)';
+        heroTitle.style.opacity = '1';
+        heroTitle.style.transform = 'translateY(0)';
+    }, 100);
+
+    // Staggered Cards
+    document.querySelectorAll('.brutal-card').forEach((card, i) => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(20px)';
+        setTimeout(() => {
+            card.style.transition = 'all 0.6s cubic-bezier(0.16, 1, 0.3, 1)';
+            card.style.opacity = '1';
+            card.style.transform = 'translateY(0)';
+        }, 300 + (i * 50));
+    });
+
+    // Count Up Animation for numbers
+    const animateValue = (obj, start, end, duration) => {
+        let startTimestamp = null;
+        const step = (timestamp) => {
+            if (!startTimestamp) startTimestamp = timestamp;
+            const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+            const currentVal = (progress * (end - start) + start);
+            obj.innerHTML = currentVal % 1 === 0 ? Math.floor(currentVal) : currentVal.toFixed(1);
+            if (progress < 1) {
+                window.requestAnimationFrame(step);
+            }
+        };
+        window.requestAnimationFrame(step);
+    };
+
+    // Trigger number counts
+    document.querySelectorAll('[data-count]').forEach(el => {
+        const val = parseFloat(el.getAttribute('data-count'));
+        setTimeout(() => animateValue(el, 0, val, 1500), 800);
+    });
+
+    // Fit Check Interaction
+    const btn = document.getElementById('analyze-btn');
+    btn.addEventListener('click', function() {
+        const originalText = btn.innerHTML;
+        btn.innerHTML = 'SYNCING...';
+        btn.classList.add('opacity-50');
+        btn.disabled = true;
+
+        const scoreEl = document.getElementById('fit-score-value');
+        const scoreCard = document.getElementById('fit-score-card');
+        
+        setTimeout(() => {
+            btn.innerHTML = originalText;
+            btn.classList.remove('opacity-50');
+            btn.disabled = false;
+            
+            // Re-animate score
+            animateValue(scoreEl, 0, 94, 1000);
+            scoreCard.style.transform = 'scale(1.1)';
+            setTimeout(() => scoreCard.style.transform = 'scale(1)', 200);
+        }, 1500);
+    });
+</script>
+</body></html>

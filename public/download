@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CreatorFit AI | Visionary Creator Analytics</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=JetBrains+Mono:wght@450&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "primary": "#c7f02d",
+                      "on-primary": "#121409",
+                      "surface": "#121409",
+                      "surface-dim": "#121409",
+                      "surface-bright": "#383a2d",
+                      "surface-container-lowest": "#0d0f05",
+                      "surface-container-low": "#1a1d11",
+                      "surface-container": "#212415",
+                      "surface-container-high": "#2b2f1d",
+                      "surface-container-highest": "#363a25",
+                      "on-surface": "#e4e3d6",
+                      "on-surface-variant": "#c7c8b7",
+                      "outline": "#919283",
+                      "outline-variant": "#46483c",
+                      "secondary": "#383a2d",
+                      "on-secondary": "#e4e3d6",
+                      "tertiary": "#adc6ff",
+                      "error": "#ffb4ab"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0px",
+                      "lg": "0px",
+                      "xl": "0px",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "sidebar-width": "260px",
+                      "margin-desktop": "40px",
+                      "margin-mobile": "16px",
+                      "stack-md": "16px",
+                      "stack-sm": "8px",
+                      "stack-lg": "32px",
+                      "stack-xs": "4px",
+                      "container-max": "1440px",
+                      "gutter": "24px"
+              },
+              "fontFamily": {
+                      "body-lg": ["Space Grotesk"],
+                      "mono": ["JetBrains Mono"],
+                      "h2": ["Space Grotesk"],
+                      "body-sm": ["Space Grotesk"],
+                      "h1": ["Space Grotesk"],
+                      "body-md": ["Space Grotesk"],
+                      "h1-mobile": ["Space Grotesk"],
+                      "display": ["Space Grotesk"],
+                      "label-caps": ["Space Grotesk"]
+              },
+              "fontSize": {
+                      "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                      "mono": ["13px", {"lineHeight": "1.5", "fontWeight": "450"}],
+                      "h2": ["24px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                      "body-sm": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                      "h1": ["40px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                      "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                      "h1-mobile": ["28px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                      "display": ["64px", {"lineHeight": "1.0", "letterSpacing": "-0.04em", "fontWeight": "800"}],
+                      "label-caps": ["12px", {"lineHeight": "1", "letterSpacing": "0.1em", "fontWeight": "700"}]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+        body {
+            background-color: #121409;
+            color: #e4e3d6;
+            font-family: 'Space Grotesk', sans-serif;
+            overflow-x: hidden;
+        }
+
+        .neo-brutal-card {
+            background: #1a1d11;
+            border: 2px solid #e4e3d6;
+            box-shadow: 4px 4px 0px #c7f02d;
+            transition: all 0.2s ease;
+        }
+
+        .neo-brutal-card:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 8px 8px 0px #c7f02d;
+        }
+
+        .neo-brutal-button-primary {
+            background: #c7f02d;
+            color: #121409;
+            border: 2px solid #121409;
+            box-shadow: 4px 4px 0px #121409;
+            transition: all 0.2s ease;
+        }
+
+        .neo-brutal-button-primary:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0px #121409;
+        }
+
+        .neo-brutal-button-secondary {
+            background: transparent;
+            color: #e4e3d6;
+            border: 2px solid #e4e3d6;
+            box-shadow: 4px 4px 0px #c7f02d;
+            transition: all 0.2s ease;
+        }
+
+        .gradient-text {
+            color: #c7f02d;
+            text-shadow: 2px 2px 0px rgba(0,0,0,0.5);
+        }
+
+        .fit-gauge-animation {
+            stroke-dasharray: 283;
+            stroke-dashoffset: 283;
+            animation: dash 2s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+        }
+
+        @keyframes dash {
+            to { stroke-dashoffset: 31; }
+        }
+
+        .parallax-element {
+            transition: transform 0.1s ease-out;
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px) scale(0.95);
+            transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        .stagger-text span {
+            display: inline-block;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease-out;
+        }
+
+        .stagger-text.active span {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .grid-overlay {
+            background-image: linear-gradient(rgba(199, 240, 45, 0.05) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(199, 240, 45, 0.05) 1px, transparent 1px);
+            background-size: 40px 40px;
+            animation: grid-scroll 20s linear infinite;
+        }
+
+        @keyframes grid-scroll {
+            0% { background-position: 0 0; }
+            100% { background-position: 40px 40px; }
+        }
+
+        .blob {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(199, 240, 45, 0.15) 0%, transparent 70%);
+            filter: blur(80px);
+            z-index: -1;
+            border-radius: 50%;
+            animation: blob-float 15s ease-in-out infinite alternate;
+        }
+
+        @keyframes blob-float {
+            0% { transform: translate(-10%, -10%) scale(1); }
+            100% { transform: translate(10%, 10%) scale(1.2); }
+        }
+    </style>
+</head>
+<body class="bg-surface selection:bg-primary/30">
+<!-- STITCH_SHADER_START:ANIMATION_8 class="fixed inset-0 -z-10 w-full h-full opacity-40" -->
+<div class="fixed inset-0 -z-10 w-full h-full opacity-40" style="display:block;">
+<canvas id="shader-canvas-ANIMATION_8" style="display:block;width:100%;height:100%"></canvas>
+<script>
+(function() {
+  const canvas = document.getElementById('shader-canvas-ANIMATION_8');
+
+  // Sync the WebGL drawing-buffer size with the CSS-driven layout size.
+  // This fires on initial layout and whenever the element is resized.
+  function syncSize() {
+    const w = canvas.clientWidth  || 1280;
+    const h = canvas.clientHeight || 720;
+    if (canvas.width !== w || canvas.height !== h) {
+      canvas.width  = w;
+      canvas.height = h;
+    }
+  }
+  if (typeof ResizeObserver !== 'undefined') {
+    new ResizeObserver(syncSize).observe(canvas);
+  }
+  syncSize();
+
+  const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+  if (!gl) return;
+  const vs = `attribute vec2 a_position;
+varying vec2 v_texCoord;
+void main() {
+  v_texCoord = a_position * 0.5 + 0.5;
+  gl_Position = vec4(a_position, 0.0, 1.0);
+}`;
+  const fs = `precision highp float;
+varying vec2 v_texCoord;
+uniform float u_time;
+uniform vec2 u_resolution;
+
+void main() {
+    vec2 uv = v_texCoord;
+    
+    // Animate base colors
+    vec3 c1 = vec3(0.706, 0.541, 0.91); // Purple #B48AE8
+    vec3 c2 = vec3(0.788, 0.753, 0.902); // Lavender #C9C0E6
+    vec3 c3 = vec3(0.663, 0.784, 1.0); // Soft Blue #A9C8FF
+    vec3 bg = vec3(0.067, 0.067, 0.067); // Black #111111
+    
+    // Noise-like mesh movement
+    float n1 = sin(uv.x * 3.0 + u_time * 0.5) * cos(uv.y * 2.0 + u_time * 0.3);
+    float n2 = cos(uv.x * 2.0 - u_time * 0.4) * sin(uv.y * 3.5 + u_time * 0.6);
+    
+    vec3 color = mix(c1, c2, uv.x + n1 * 0.2);
+    color = mix(color, c3, uv.y + n2 * 0.2);
+    color = mix(bg, color, 0.4); // Subtle integration
+    
+    // Grid overlay
+    vec2 grid = fract(uv * 40.0);
+    float line = step(0.98, grid.x) + step(0.98, grid.y);
+    color += line * 0.03; // Very subtle grid
+    
+    gl_FragColor = vec4(color, 1.0);
+}`;
+  function cs(type, src) {
+    const s = gl.createShader(type);
+    gl.shaderSource(s, src);
+    gl.compileShader(s);
+    return s;
+  }
+  const prog = gl.createProgram();
+  gl.attachShader(prog, cs(gl.VERTEX_SHADER, vs));
+  gl.attachShader(prog, cs(gl.FRAGMENT_SHADER, fs));
+  gl.linkProgram(prog);
+  gl.useProgram(prog);
+  const buf = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, 1,1]), gl.STATIC_DRAW);
+  const pos = gl.getAttribLocation(prog, 'a_position');
+  gl.enableVertexAttribArray(pos);
+  gl.vertexAttribPointer(pos, 2, gl.FLOAT, false, 0, 0);
+  const uTime = gl.getUniformLocation(prog, 'u_time');
+  const uRes = gl.getUniformLocation(prog, 'u_resolution');
+  const uMouse = gl.getUniformLocation(prog, 'u_mouse');
+
+  // u_mouse is in pixel coordinates matching u_resolution (ShaderToy convention).
+  // Shaders that need normalized coords should use: u_mouse / u_resolution.
+  let mouse = { x: canvas.width / 2, y: canvas.height / 2 };
+  window.addEventListener('mousemove', (event) => {
+    const rect = canvas.getBoundingClientRect();
+    if (rect.width && rect.height) {
+      const nx = (event.clientX - rect.left) / rect.width;
+      const ny = 1.0 - (event.clientY - rect.top) / rect.height;
+      mouse.x = nx * canvas.width;
+      mouse.y = ny * canvas.height;
+    }
+  });
+
+  function render(t) {
+    if (typeof ResizeObserver === 'undefined') syncSize();
+    gl.viewport(0, 0, canvas.width, canvas.height);
+    if (uTime) gl.uniform1f(uTime, t * 0.001);
+    if (uRes) gl.uniform2f(uRes, canvas.width, canvas.height);
+    if (uMouse) gl.uniform2f(uMouse, mouse.x, mouse.y);
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    requestAnimationFrame(render);
+  }
+  render(0);
+})();
+</script>
+</div>
+<!-- STITCH_SHADER_END:ANIMATION_8 -->
+<div class="fixed inset-0 -z-10 grid-overlay"></div>
+<!-- Navigation -->
+<nav class="fixed top-0 left-0 w-full z-50 h-20 border-b-2 border-on-surface bg-surface/90 backdrop-blur-sm flex justify-between items-center px-margin-desktop">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 border-2 border-on-surface bg-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary font-bold">auto_awesome</span>
+</div>
+<span class="font-display text-h2 text-on-surface uppercase tracking-tighter">CreatorFit AI</span>
+</div>
+<div class="hidden md:flex items-center gap-10">
+<a class="font-label-caps text-on-surface hover:text-primary transition-colors" href="#how-it-works">HOW IT WORKS</a>
+<a class="font-label-caps text-on-surface hover:text-primary transition-colors" href="#ai-fit-scoring">AI FIT SCORING</a>
+<a class="font-label-caps text-on-surface hover:text-primary transition-colors" href="#discovery">DISCOVERY</a>
+<a class="font-label-caps text-on-surface hover:text-primary transition-colors" href="#pricing">PRICING</a>
+</div>
+<div class="flex items-center gap-6">
+<button class="hover:text-primary transition-colors">
+<span class="material-symbols-outlined">search</span>
+</button>
+<button class="neo-brutal-button-primary px-6 py-2 rounded-full font-label-caps">
+                GET STARTED
+            </button>
+</div>
+</nav>
+<!-- Hero Section -->
+<section class="relative min-h-screen pt-32 pb-20 flex flex-col items-center justify-center overflow-hidden">
+<div class="blob top-0 left-0"></div>
+<div class="blob bottom-0 right-0" style="animation-delay: -5s;"></div>
+<div class="container-max mx-auto px-margin-desktop grid grid-cols-1 lg:grid-cols-2 gap-20 items-center relative z-10">
+<div class="reveal">
+<div class="inline-flex items-center gap-2 px-4 py-2 border-2 border-on-surface bg-surface-container-high mb-8">
+<span class="w-3 h-3 bg-primary animate-pulse"></span>
+<span class="font-label-caps text-on-surface">SYSTEM UPDATE: GPT-4O ENABLED</span>
+</div>
+<h1 class="font-display text-display text-on-surface mb-8 leading-[0.95] uppercase italic stagger-text" id="hero-title">
+                    FIND THE PERFECT <span class="gradient-text italic not-italic">CREATOR-BRAND MATCH</span> WITH AI
+                </h1>
+<p class="font-body-lg text-on-surface-variant mb-12 max-w-xl border-l-4 border-primary pl-6">
+                    Bridge the gap between raw data and creative intuition. Our AI Engine analyzes audience alignment, tonal resonance, and engagement quality to ensure every partnership is a guaranteed fit.
+                </p>
+<div class="flex flex-wrap gap-6">
+<button class="neo-brutal-button-primary px-10 py-5 rounded-full font-label-caps text-lg">
+                        GET STARTED NOW
+                    </button>
+<button class="neo-brutal-button-secondary px-10 py-5 rounded-full font-label-caps text-lg flex items-center gap-3">
+<span class="material-symbols-outlined">play_circle</span>
+                        TRY DEMO
+                    </button>
+</div>
+<div class="mt-16 flex items-center gap-6 opacity-60">
+<span class="font-label-caps text-[10px] whitespace-nowrap">TRUSTED BY //</span>
+<div class="flex gap-8 font-black italic tracking-tighter">
+<span>LOREAL</span>
+<span>ADIDAS</span>
+<span>REVOLUT</span>
+</div>
+</div>
+</div>
+<!-- Hero Visual -->
+<div class="relative reveal delay-200">
+<div class="relative w-full aspect-square flex items-center justify-center">
+<div class="absolute inset-0 border-2 border-dashed border-primary/20 rounded-full animate-[spin_60s_linear_infinite]"></div>
+<svg class="w-[85%] h-[85%] transform -rotate-90" viewbox="0 0 100 100">
+<circle class="text-surface-container-highest" cx="50" cy="50" fill="transparent" r="45" stroke="currentColor" stroke-width="10"></circle>
+<circle class="fit-gauge-animation text-primary" cx="50" cy="50" fill="transparent" r="45" stroke="currentColor" stroke-linecap="butt" stroke-width="10"></circle>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center text-center">
+<span class="font-display text-[100px] font-black text-on-surface leading-none italic">89</span>
+<span class="font-label-caps text-primary tracking-[0.3em] mt-2">FIT_SCORE.EXE</span>
+</div>
+<!-- Parallax Cards -->
+<div class="absolute top-10 -left-10 neo-brutal-card p-6 rounded-none parallax-element" data-depth="0.1">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 bg-primary flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined">groups</span>
+</div>
+<div>
+<p class="font-label-caps text-on-surface-variant text-[10px]">AUDIENCE_MATCH</p>
+<p class="font-display text-2xl font-bold">92%</p>
+</div>
+</div>
+</div>
+<div class="absolute top-1/2 -right-12 neo-brutal-card p-6 rounded-none parallax-element" data-depth="-0.15">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 bg-primary flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined">psychology</span>
+</div>
+<div>
+<p class="font-label-caps text-on-surface-variant text-[10px]">TONE_RESONANCE</p>
+<p class="font-display text-2xl font-bold">87%</p>
+</div>
+</div>
+</div>
+<div class="absolute -bottom-10 left-1/4 neo-brutal-card p-6 rounded-none parallax-element" data-depth="0.2">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 bg-primary flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined">verified</span>
+</div>
+<div>
+<p class="font-label-caps text-on-surface-variant text-[10px]">ENGAGEMENT_VIBE</p>
+<p class="font-display text-2xl font-bold">90%</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- How It Works -->
+<section class="py-32 relative border-t-2 border-on-surface" id="how-it-works">
+<div class="container-max mx-auto px-margin-desktop">
+<div class="mb-24 reveal">
+<h2 class="font-display text-h1 text-on-surface mb-6 uppercase italic">PRECISION-ENGINEERED WORKFLOW</h2>
+<div class="w-32 h-2 bg-primary mb-8"></div>
+<p class="font-body-lg text-on-surface-variant max-w-2xl">Three steps to identifying your next top-performing creator partner.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+<div class="neo-brutal-card p-12 reveal delay-100">
+<div class="w-16 h-16 border-2 border-on-surface bg-primary flex items-center justify-center mb-10">
+<span class="material-symbols-outlined text-on-primary text-[32px]">dataset</span>
+</div>
+<h3 class="font-h2 text-on-surface mb-6 uppercase">01. DATA INGESTION</h3>
+<p class="font-body-md text-on-surface-variant">Upload your brand guidelines and target demographics. Our AI ingests every nuance of your identity.</p>
+</div>
+<div class="neo-brutal-card p-12 reveal delay-200">
+<div class="w-16 h-16 border-2 border-on-surface bg-primary flex items-center justify-center mb-10">
+<span class="material-symbols-outlined text-on-primary text-[32px]">filter_alt</span>
+</div>
+<h3 class="font-h2 text-on-surface mb-6 uppercase">02. NEURAL FILTERING</h3>
+<p class="font-body-md text-on-surface-variant">Our model cross-references 10M+ creators against your unique "Brand Fit" signature in seconds.</p>
+</div>
+<div class="neo-brutal-card p-12 reveal delay-300">
+<div class="w-16 h-16 border-2 border-on-surface bg-primary flex items-center justify-center mb-10">
+<span class="material-symbols-outlined text-on-primary text-[32px]">analytics</span>
+</div>
+<h3 class="font-h2 text-on-surface mb-6 uppercase">03. PREDICTIVE ROI</h3>
+<p class="font-body-md text-on-surface-variant">Get deep analytical reports predicting engagement, reach, and sentiment before you sign.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- AI Fit Scoring Section -->
+<section class="py-32 bg-surface-container-lowest border-y-2 border-on-surface" id="ai-fit-scoring">
+<div class="container-max mx-auto px-margin-desktop grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
+<div class="order-2 lg:order-1 reveal">
+<div class="relative neo-brutal-card p-2 bg-on-surface">
+<img class="w-full h-[500px] object-cover grayscale contrast-125" data-alt="Futuristic dashboard" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDd65MseFJT_XXu3IzV5T-jWXJQrlX_5N0M1iki6x-b-QPShPYBgSuglJxqRbSmbfP15owBQPO-pnJDLnUVQ3riqbzs062lFFBDe0FAaoKc6NOSZEVXlU0nv0b32UoNab5dKhrIDSdUwqlN2U9dArgie9TmVsWDhiFGAcMa_pXazucFSbKlWVmDzq-bkCTSrU63uMxX6pVp_r2DPkILwOypoTDw1uQ6cwQISOMIlpuYMNqlBrUveOyz81Mv5m_BUqnT055FOEsZrWCf"/>
+<div class="absolute bottom-10 left-10 right-10 neo-brutal-card p-8 bg-surface">
+<div class="flex justify-between items-center">
+<div>
+<p class="font-label-caps text-primary mb-2">ANALYSIS_LIVE</p>
+<p class="font-display text-xl font-bold uppercase italic">PREDICTING 92% VIRAL POTENTIAL</p>
+</div>
+<span class="material-symbols-outlined text-primary text-4xl">trending_up</span>
+</div>
+</div>
+</div>
+</div>
+<div class="order-1 lg:order-2 reveal">
+<h2 class="font-display text-display text-on-surface mb-12 uppercase leading-tight italic">GO BEYOND <br/><span class="gradient-text">VANITY METRICS</span></h2>
+<div class="space-y-12">
+<div class="flex gap-8 group">
+<div class="flex-shrink-0 w-16 h-16 border-2 border-on-surface bg-surface-container-high flex items-center justify-center group-hover:bg-primary transition-colors">
+<span class="material-symbols-outlined group-hover:text-on-primary">psychology</span>
+</div>
+<div>
+<h4 class="font-h2 text-on-surface text-xl mb-3 uppercase">Semantic Tone Alignment</h4>
+<p class="font-body-md text-on-surface-variant">AI analyzes years of content to ensure the creator's natural voice aligns with your brand's formal or informal guidelines.</p>
+</div>
+</div>
+<div class="flex gap-8 group">
+<div class="flex-shrink-0 w-16 h-16 border-2 border-on-surface bg-surface-container-high flex items-center justify-center group-hover:bg-primary transition-colors">
+<span class="material-symbols-outlined group-hover:text-on-primary">diversity_3</span>
+</div>
+<div>
+<h4 class="font-h2 text-on-surface text-xl mb-3 uppercase">Demographic Overlap</h4>
+<p class="font-body-md text-on-surface-variant">Precisely identify where your customers and their fans intersect across age, location, and interests.</p>
+</div>
+</div>
+<div class="flex gap-8 group">
+<div class="flex-shrink-0 w-16 h-16 border-2 border-on-surface bg-surface-container-high flex items-center justify-center group-hover:bg-primary transition-colors">
+<span class="material-symbols-outlined group-hover:text-on-primary">verified</span>
+</div>
+<div>
+<h4 class="font-h2 text-on-surface text-xl mb-3 uppercase">Engagement Authenticity</h4>
+<p class="font-body-md text-on-surface-variant">Our engine detects bot activity and passive scrolling to surface only creators with a truly active and loyal community.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Creator Discovery (Bento Grid) -->
+<section class="py-32" id="discovery">
+<div class="container-max mx-auto px-margin-desktop">
+<div class="flex flex-col md:flex-row justify-between items-end mb-20 gap-8 reveal">
+<div class="max-w-2xl">
+<h2 class="font-display text-h1 text-on-surface mb-6 uppercase italic">DISCOVER YOUR FUTURE PARTNERS</h2>
+<p class="font-body-lg text-on-surface-variant border-l-4 border-primary pl-6">AI-curated selections based on your specific campaign objectives and industry niche.</p>
+</div>
+<button class="font-label-caps text-primary flex items-center gap-4 group">
+                    EXPLORE_DIRECTORY <span class="material-symbols-outlined group-hover:translate-x-2 transition-transform">arrow_right_alt</span>
+</button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-4 grid-rows-2 gap-8 h-[800px]">
+<div class="md:col-span-2 md:row-span-2 neo-brutal-card relative overflow-hidden group reveal">
+<img class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700 group-hover:scale-105" data-alt="Elena Sterling" src="https://lh3.googleusercontent.com/aida-public/AB6AXuASK7DqBMOaRHkP85B4wxwUeVLOBrDzRopOX--3S_hhH2Nus8bf8ptuigoU5F9lRBoInE-NVAeiaiAgvS6uPeGYq3UohFDtAAhLnXwVpyGDutt-XLNbvkqKDqO797F8cXH-Xl3FjsIJSTJwy5XdZJH-lB5VeIW5MQmp14a_fXNKWBgyBpGS8fGFIqQucyLsJBwuOy0BmAgpm6dbR1swwZ5OKqhsMvrnKlHgRq3BShxVSvBAfTcA3EzPpnCywtp4eiYiN-WAk3zpmTXv"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface to-transparent opacity-90"></div>
+<div class="absolute bottom-10 left-10 right-10">
+<div class="flex items-center gap-4 mb-6">
+<span class="px-4 py-1 bg-primary text-on-primary font-label-caps italic">LIFESTYLE</span>
+<span class="px-4 py-1 border-2 border-on-surface bg-surface text-on-surface font-label-caps italic count-up" data-target="94">0% FIT</span>
+</div>
+<h3 class="font-display text-4xl text-on-surface mb-4 uppercase italic">Elena Sterling</h3>
+<p class="font-body-md text-on-surface-variant max-w-sm">Top-tier engagement in luxury fashion and sustainable living niches.</p>
+</div>
+</div>
+<div class="md:col-span-2 neo-brutal-card relative overflow-hidden group reveal">
+<img class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" data-alt="Marcus Vane" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA-H5goMTyuuUk6wXrXt4MvzOviYoYHljABkx1ZMUQxRhA5W9CRTRJJcgFmE5HIRYBY03vkosh7URxf254a-4dPV-Y8s1FJ__aVAII5nREhzjc0xi9Z8hr0ZyioG_T0Oj3jljFW2X9gSXj-o89by9DLcxTTj2zh2V96zj57msaIpYwbKUkSZGdBid9Y0LH_DLrWv7joHTeHcPzKXAE4T3XuqjSlAnRZQ0XGNlw3DlRc1EXnXEOjxjs6ZfHimtgvCNtP-36NLQrBSgbs"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface to-transparent opacity-70"></div>
+<div class="absolute bottom-8 left-8">
+<h3 class="font-display text-2xl text-on-surface uppercase italic">Marcus Vane</h3>
+<p class="font-label-caps text-primary italic">TECH_MATCH // <span class="count-up" data-target="88">0</span>%</p>
+</div>
+</div>
+<div class="neo-brutal-card relative overflow-hidden group reveal">
+<img class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" data-alt="Sarah Chen" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDznBBNh6ORAXUjHRc_iPYFlEcLMP8VLJHW5gY9IaURTyA5dZd3sYyAUZTCI3sBIi1ftgjL_knDIGpzjXVBmtLG3TM6Qd8yq6I_hqwnypYpMwTsgfh8N-b2b1DtQtB4oxnG98Do_zsO1aAvxpNOLQd5N3GWtLeVtRdkIDTXkqsxl1YQrB0mfpTKtZ1ywBo1Ow0sFNFll9-7HxFCpmSVUXICXZC3VXOUhRgFb4LB1-LPsWu2xwLmHKcpX1AzOMUaQX2kxXkApsFWM88d"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface to-transparent opacity-80"></div>
+<div class="absolute bottom-6 left-6">
+<p class="font-display text-lg uppercase italic">Sarah Chen</p>
+<p class="font-label-caps text-primary text-[10px]">WELLNESS_91%</p>
+</div>
+</div>
+<div class="neo-brutal-card relative overflow-hidden group reveal">
+<img class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" data-alt="David J." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAZDd1xWqYuom225sdx2FF669lPa4yMReyQJ79KmUKcB6XZ6W8qj6kVcadwOzEBplAcbtf0GGAQpnsgwxGLbtX4R4bYTmXubVZGI_E6oH7j1OPjp21hAHrEdDRf7hXAs_Dj75gFkZ-xUZ68MjzFkUCGYWHHlm75mSPWz2CfSjiYVIcakHdz0nyl3FlC-1Hz3JuN6LcdS6UD-Wa_as7iG9CH-oj54X5MQrQsoRNCwYvIqHS2p6HOFLYYHae6ijdvv8JV1R966zwJKvBO"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface to-transparent opacity-80"></div>
+<div class="absolute bottom-6 left-6">
+<p class="font-display text-lg uppercase italic">David J.</p>
+<p class="font-label-caps text-primary text-[10px]">TRAVEL_85%</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Pricing Section -->
+<section class="py-32 relative border-t-2 border-on-surface" id="pricing">
+<div class="container-max mx-auto px-margin-desktop">
+<div class="mb-24 reveal">
+<h2 class="font-display text-h1 text-on-surface mb-6 uppercase italic">SCALABLE INTELLIGENCE</h2>
+<p class="font-body-lg text-on-surface-variant max-w-2xl border-l-4 border-primary pl-6">Plans designed for boutique agencies and global enterprises alike.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+<div class="neo-brutal-card p-12 reveal delay-100 flex flex-col">
+<p class="font-label-caps text-on-surface-variant mb-6 tracking-widest">_STARTER</p>
+<div class="flex items-baseline gap-2 mb-10">
+<span class="text-6xl font-black italic">$499</span>
+<span class="text-on-surface-variant font-label-caps">/MO</span>
+</div>
+<ul class="space-y-6 mb-16 flex-grow">
+<li class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary font-bold">check</span>
+<span class="font-body-md uppercase">50 AI Analysis Tokens</span>
+</li>
+<li class="flex items-center gap-4 opacity-50">
+<span class="material-symbols-outlined">check</span>
+<span class="font-body-md uppercase">Standard Search</span>
+</li>
+<li class="flex items-center gap-4 opacity-50">
+<span class="material-symbols-outlined">check</span>
+<span class="font-body-md uppercase">Exportable Reports</span>
+</li>
+</ul>
+<button class="neo-brutal-button-secondary w-full py-5 rounded-full font-label-caps">CHOOSE STARTER</button>
+</div>
+<div class="neo-brutal-card p-12 reveal delay-200 bg-surface-container-high border-primary flex flex-col relative scale-105 z-10" style="box-shadow: 8px 8px 0px #e4e3d6;">
+<div class="absolute -top-6 left-1/2 -translate-x-1/2 bg-primary text-on-primary px-6 py-2 border-2 border-on-surface font-label-caps italic">MOST_POPULAR.EXE</div>
+<p class="font-label-caps text-primary mb-6 tracking-widest">_PROFESSIONAL</p>
+<div class="flex items-baseline gap-2 mb-10">
+<span class="text-6xl font-black italic">$1,299</span>
+<span class="text-on-surface-variant font-label-caps">/MO</span>
+</div>
+<ul class="space-y-6 mb-16 flex-grow">
+<li class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary font-bold text-2xl">verified</span>
+<span class="font-body-md uppercase font-bold">Unlimited AI Analysis</span>
+</li>
+<li class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary font-bold">check</span>
+<span class="font-body-md uppercase">Advanced Neural Matching</span>
+</li>
+<li class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary font-bold">check</span>
+<span class="font-body-md uppercase">Competitor Benchmarking</span>
+</li>
+</ul>
+<button class="neo-brutal-button-primary w-full py-5 rounded-full font-label-caps text-lg">GO PROFESSIONAL</button>
+</div>
+<div class="neo-brutal-card p-12 reveal delay-300 flex flex-col">
+<p class="font-label-caps text-on-surface-variant mb-6 tracking-widest">_ENTERPRISE</p>
+<div class="flex items-baseline gap-2 mb-10">
+<span class="text-6xl font-black italic">CUSTOM</span>
+</div>
+<ul class="space-y-6 mb-16 flex-grow">
+<li class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary font-bold">check</span>
+<span class="font-body-md uppercase">Custom Model Training</span>
+</li>
+<li class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary font-bold">check</span>
+<span class="font-body-md uppercase">Account Manager</span>
+</li>
+</ul>
+<button class="neo-brutal-button-secondary w-full py-5 rounded-full font-label-caps">CONTACT SALES</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Footer -->
+<footer class="py-24 border-t-2 border-on-surface bg-surface-container-lowest">
+<div class="container-max mx-auto px-margin-desktop flex flex-col md:flex-row justify-between gap-16">
+<div class="max-w-md">
+<div class="flex items-center gap-3 mb-8">
+<div class="w-12 h-12 border-2 border-on-surface bg-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary font-bold">auto_awesome</span>
+</div>
+<span class="font-display text-3xl text-on-surface uppercase italic font-black">CreatorFit AI</span>
+</div>
+<p class="font-body-md text-on-surface-variant mb-10">Building the next generation of marketing intelligence through cutting-edge AI and precision data analytics.</p>
+<div class="flex gap-6">
+<a class="w-12 h-12 border-2 border-on-surface bg-surface-container-high flex items-center justify-center hover:bg-primary hover:text-on-primary transition-all" href="#">
+<span class="material-symbols-outlined">public</span>
+</a>
+<a class="w-12 h-12 border-2 border-on-surface bg-surface-container-high flex items-center justify-center hover:bg-primary hover:text-on-primary transition-all" href="#">
+<span class="material-symbols-outlined">share</span>
+</a>
+</div>
+</div>
+<div class="grid grid-cols-2 sm:grid-cols-3 gap-20">
+<div>
+<p class="font-label-caps text-primary mb-8 underline decoration-2 underline-offset-8">PLATFORM</p>
+<ul class="space-y-4 text-on-surface font-body-sm font-bold uppercase italic">
+<li><a class="hover:text-primary transition-colors" href="#">Discovery</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">AI Engine</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Analytics</a></li>
+</ul>
+</div>
+<div>
+<p class="font-label-caps text-primary mb-8 underline decoration-2 underline-offset-8">COMPANY</p>
+<ul class="space-y-4 text-on-surface font-body-sm font-bold uppercase italic">
+<li><a class="hover:text-primary transition-colors" href="#">About Us</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Careers</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Contact</a></li>
+</ul>
+</div>
+<div>
+<p class="font-label-caps text-primary mb-8 underline decoration-2 underline-offset-8">LEGAL</p>
+<ul class="space-y-4 text-on-surface font-body-sm font-bold uppercase italic">
+<li><a class="hover:text-primary transition-colors" href="#">Privacy</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Terms</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Security</a></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="container-max mx-auto px-margin-desktop mt-24 pt-10 border-t-2 border-on-surface flex flex-col md:flex-row justify-between items-center gap-8">
+<p class="font-body-sm text-on-surface-variant font-bold uppercase">© 2024 CREATORFIT AI // ALL RIGHTS RESERVED.</p>
+<div class="flex items-center gap-3 px-4 py-2 border-2 border-on-surface bg-surface">
+<span class="w-2 h-2 rounded-full bg-[#52ff00] animate-pulse"></span>
+<span class="font-label-caps text-[10px] tracking-widest">ALL SYSTEMS OPERATIONAL</span>
+</div>
+</div>
+</footer>
+<script>
+        // Staggered Text Reveal
+        document.addEventListener('DOMContentLoaded', () => {
+            const heroTitle = document.getElementById('hero-title');
+            const words = heroTitle.innerText.split(' ');
+            heroTitle.innerHTML = words.map(word => `<span>${word}</span>`).join(' ');
+            
+            setTimeout(() => {
+                heroTitle.classList.add('active');
+                heroTitle.querySelectorAll('span').forEach((span, i) => {
+                    span.style.transitionDelay = `${i * 0.1}s`;
+                });
+            }, 300);
+        });
+
+        // Intersection Observer for Section Reveals
+        const observerOptions = {
+            threshold: 0.15,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    
+                    // Handle count-up animations when section becomes visible
+                    const counters = entry.target.querySelectorAll('.count-up');
+                    counters.forEach(counter => {
+                        const target = +counter.getAttribute('data-target');
+                        const speed = 2000 / target;
+                        let count = 0;
+                        const updateCount = () => {
+                            if (count < target) {
+                                count++;
+                                counter.innerText = counter.classList.contains('italic') ? `${count}% FIT` : count;
+                                setTimeout(updateCount, speed);
+                            } else {
+                                counter.innerText = counter.classList.contains('italic') ? `${target}% FIT` : target;
+                            }
+                        };
+                        updateCount();
+                    });
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        // Parallax Effect for floating cards
+        window.addEventListener('mousemove', e => {
+            const elements = document.querySelectorAll('.parallax-element');
+            const mouseX = e.clientX;
+            const mouseY = e.clientY;
+
+            elements.forEach(el => {
+                const depth = parseFloat(el.getAttribute('data-depth'));
+                const x = (window.innerWidth / 2 - mouseX) * depth;
+                const y = (window.innerHeight / 2 - mouseY) * depth;
+                el.style.transform = `translate(${x}px, ${y}px)`;
+            });
+        });
+
+        // Smooth Scroll
+        document.querySelectorAll('nav a').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
+</body></html>
