@@ -8,7 +8,7 @@ interface TopNavProps {
   avatarUrl?: string;
 }
 
-export default function TopNav({ userName = 'Alex Rivers', userRole = 'Pro Creator', avatarUrl }: TopNavProps) {
+export default function TopNav({ userName = 'Pratik', userRole = 'Pro Creator', avatarUrl }: TopNavProps) {
   const { theme, toggleTheme } = useTheme();
 
   return (

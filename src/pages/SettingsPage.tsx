@@ -13,9 +13,9 @@ type Tab = 'profile' | 'social' | 'ai' | 'security';
 
 export default function SettingsPage({ onNavigate, onNewAnalysis }: SettingsPageProps) {
   const [activeTab, setActiveTab] = useState<Tab>('profile');
-  const [displayName, setDisplayName] = useState('Alex Rivera');
+  const [displayName, setDisplayName] = useState('Pratik');
   const [bio, setBio] = useState('Digital architect specialising in performance-driven creative strategy for AI-driven ecosystems.');
-  const [email, setEmail] = useState('alex@smartsponsorfit.ai');
+  const [email, setEmail] = useState('pratik@smartsponsorfit.ai');
   const [location, setLocation] = useState('Berlin, Germany');
   const [saved, setSaved] = useState(false);
   const [aiPreferences, setAiPreferences] = useState({
@@ -41,7 +41,7 @@ export default function SettingsPage({ onNavigate, onNewAnalysis }: SettingsPage
       <ShaderBackground opacity={40} />
       <Sidebar activeItem="settings" onNavigate={onNavigate} onNewAnalysis={onNewAnalysis} />
       <TopNav
-        userName="Alex Rivera"
+        userName="Pratik"
         userRole="Pro Plan"
         avatarUrl="https://lh3.googleusercontent.com/aida-public/AB6AXuAsl6oqHJA5QTo39561LQg3z2l5CmpLpUvvI0Pry_A77pDXwegYuePfpPpwCmh69NxI3IDlL8wcSuOYBx6tmR30fDAQ2xnejMx46cbIigcyigqbjOaKekGiHV9j5BMku5hcOTFZcTkn40U2zFOKe30wG85AdBDGBXFvYsm7xHJXoY7gkW9PHFZgciJ5ftjnWQipUrkAdt6W_9sii8Pbklq-g1rPwV4QvB5oELXm1PRVfQs39mvePGHxfN6n-9UTLkuLLScK_iOLP4db"
       />

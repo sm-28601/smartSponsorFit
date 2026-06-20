@@ -85,7 +85,7 @@ export default function ExportsPage({ onNavigate, onNewAnalysis }: ExportsPagePr
                     <div className="flex-1">
                       <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
                         <div>
-                          <h2 className="font-display text-3xl font-black text-white">Alex Rivera</h2>
+                          <h2 className="font-display text-3xl font-black text-white">Pratik</h2>
                           <p className="text-primary font-black uppercase tracking-widest text-sm mt-1">TECH & AI STORYTELLER</p>
                           <div className="flex items-center gap-4 mt-3 text-on-surface/50 text-sm font-bold">
                             <span className="flex items-center gap-1"><MapPin size={13} /> Austin, TX</span>
