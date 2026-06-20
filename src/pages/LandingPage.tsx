@@ -1,13 +1,15 @@
-import { Sparkles, Play, Database, Filter, TrendingUp, Brain, Users, CheckCircle, ArrowRight, Globe, Share } from 'lucide-react';
+import { Sparkles, Play, Database, Filter, TrendingUp, Brain, Users, CheckCircle, ArrowRight, Globe, Share, Moon, Sun } from 'lucide-react';
 import ShaderBackground from '../components/ShaderBackground';
 import Reveal from '../components/RevealSection';
 import { useEffect, useRef, useState } from 'react';
+import { useTheme } from '../contexts/ThemeContext';
 
 interface LandingPageProps {
   onNavigate: (page: string) => void;
 }
 
 export default function LandingPage({ onNavigate }: LandingPageProps) {
+  const { theme, toggleTheme } = useTheme();
   const heroTitleRef = useRef<HTMLHeadingElement>(null);
   const [heroWordsVisible, setHeroWordsVisible] = useState(false);
 
@@ -45,9 +47,13 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
             </a>
           ))}
         </div>
-        <div className="flex items-center gap-6">
-          <button className="hover:text-primary transition-colors">
-            <Sparkles size={20} />
+        <div className="flex items-center gap-4">
+          <button
+            onClick={toggleTheme}
+            className="bg-surface-container-high border-2 border-on-surface-alt rounded-full p-2 hover:bg-primary hover:text-black transition-colors"
+            title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+          >
+            {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
           </button>
           <button onClick={() => onNavigate('dashboard')} className="neo-button bg-primary text-on-primary px-6 py-2 font-label-caps">
             GET STARTED
@@ -64,7 +70,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
           <Reveal>
             <div className="inline-flex items-center gap-2 px-4 py-2 border-2 border-on-surface-alt bg-surface-container-high mb-8">
               <span className="w-3 h-3 bg-primary animate-pulse" />
-              <span className="font-label-caps text-on-surface-alt">SYSTEM UPDATE: GPT-4O ENABLED</span>
+              <span className="font-label-caps text-on-surface-alt">SYSTEM UPDATE: GPT-4.O ENABLED</span>
             </div>
 
             <h1 ref={heroTitleRef} className="font-display text-display text-on-surface-alt mb-8 leading-[0.95] uppercase italic">

@@ -191,7 +191,7 @@ export default function ExportsPage({ onNavigate, onNewAnalysis }: ExportsPagePr
                       { name: 'YouTube Verification', type: 'Stats Snapshot', date: 'Oct 18, 2023', status: 'EXPIRED', statusColor: 'bg-red-500/20 text-red-400', action: 'Renew' },
                     ].map((r) => (
                       <tr key={r.name} className="border-b border-black/10 hover:bg-white/3 transition-colors">
-                        <td className="px-7 py-5 font-bold text-white">{r.name}</td>
+                        <td className="px-7 py-5 font-bold text-black dark:text-white">{r.name}</td>
                         <td className="px-7 py-5 text-on-surface/50 text-sm font-bold">{r.type}</td>
                         <td className="px-7 py-5 text-on-surface/50 text-sm font-bold">{r.date}</td>
                         <td className="px-7 py-5">
