@@ -44,7 +44,7 @@ export default function DiscoverPage({ onNavigate, onNewAnalysis }: DiscoverPage
   };
 
   return (
-    <div className="dark">
+    <div>
       <ShaderBackground opacity={40} />
       <Sidebar activeItem="discover" onNavigate={onNavigate} onNewAnalysis={onNewAnalysis} />
       <TopNav avatarUrl="https://lh3.googleusercontent.com/aida-public/AB6AXuAsl6oqHJA5QTo39561LQg3z2l5CmpLpUvvI0Pry_A77pDXwegYuePfpPpwCmh69NxI3IDlL8wcSuOYBx6tmR30fDAQ2xnejMx46cbIigcyigqbjOaKekGiHV9j5BMku5hcOTFZcTkn40U2zFOKe30wG85AdBDGBXFvYsm7xHJXoY7gkW9PHFZgciJ5ftjnWQipUrkAdt6W_9sii8Pbklq-g1rPwV4QvB5oELXm1PRVfQs39mvePGHxfN6n-9UTLkuLLScK_iOLP4db" />
@@ -96,9 +96,9 @@ export default function DiscoverPage({ onNavigate, onNewAnalysis }: DiscoverPage
           {/* Brand Grid */}
           <div className={`grid gap-6 mb-10 ${viewMode === 'grid' ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-4' : 'grid-cols-1'}`}>
             {BRANDS.map((brand) => (
-              <div key={brand.name} className={`neo-card bg-surface-container p-7 flex flex-col gap-4 ${viewMode === 'list' ? 'flex-row items-center' : ''}`}>
+              <div key={brand.name} className={`neo-card bg-surface-container p-7 flex gap-4 min-w-0 overflow-hidden ${viewMode === 'list' ? 'flex-col xl:flex-row xl:items-center' : 'flex-col'}`}>
                 {/* Top Row */}
-                <div className={`flex ${viewMode === 'grid' ? 'justify-between items-start' : 'items-center gap-6 flex-1'}`}>
+                <div className={`flex min-w-0 ${viewMode === 'grid' ? 'justify-between items-start' : 'items-center gap-6 flex-1'}`}>
                   <div
                     className="w-14 h-14 rounded-2xl border-[3px] border-black shadow-brutal flex items-center justify-center text-2xl flex-shrink-0"
                     style={{ backgroundColor: brand.color + '33', borderColor: brand.color }}
@@ -108,7 +108,7 @@ export default function DiscoverPage({ onNavigate, onNewAnalysis }: DiscoverPage
                   {viewMode === 'list' && (
                     <div className="flex-1 min-w-0">
                       <h3 className="font-black text-xl text-white uppercase italic">{brand.name}</h3>
-                      <p className="text-on-surface/50 text-sm font-bold">{brand.desc}</p>
+                      <p className="text-on-surface/50 text-sm font-bold leading-relaxed">{brand.desc}</p>
                     </div>
                   )}
                   <div className="text-right flex-shrink-0">
@@ -137,7 +137,7 @@ export default function DiscoverPage({ onNavigate, onNewAnalysis }: DiscoverPage
                 )}
 
                 {viewMode === 'list' && (
-                  <div className="flex items-center gap-6 flex-shrink-0 text-sm">
+                  <div className="flex flex-wrap items-center gap-6 flex-shrink-0 text-sm">
                     <div>
                       <div className="text-on-surface/40 text-[10px] font-black uppercase">Industry</div>
                       <div className="text-on-surface/80 font-bold">{brand.industry}</div>
@@ -151,16 +151,16 @@ export default function DiscoverPage({ onNavigate, onNewAnalysis }: DiscoverPage
 
                 {/* Score bar (grid only) */}
                 {viewMode === 'grid' && (
-                  <div className="w-full bg-black/40 h-1.5 rounded-full overflow-hidden">
+                  <div className="w-full bg-gray-300 dark:bg-black/40 h-1.5 rounded-full overflow-hidden">
                     <div className={`h-full rounded-full ${fitBarColor(brand.fit)}`} style={{ width: `${brand.fit}%` }} />
                   </div>
                 )}
 
-                <div className={`flex gap-3 ${viewMode === 'list' ? 'flex-shrink-0' : 'mt-1'}`}>
-                  <button className="neo-button bg-surface-container-high text-on-surface/80 px-5 py-2 text-sm flex-1 hover:bg-black hover:text-white">
+                <div className={`grid grid-cols-2 gap-3 min-w-0 ${viewMode === 'list' ? 'w-full xl:w-[220px] xl:flex-shrink-0' : 'mt-1'}`}>
+                  <button className="neo-button bg-surface-container-high text-on-surface/80 px-4 py-2 text-sm min-w-0 flex items-center justify-center text-center hover:bg-black dark:hover:bg-black hover:text-white dark:hover:text-white">
                     Details
                   </button>
-                  <button className="neo-button bg-primary text-black px-5 py-2 text-sm flex-1 font-black">
+                  <button className="neo-button bg-primary text-black px-4 py-2 text-sm min-w-0 font-black flex items-center justify-center text-center">
                     Inquire
                   </button>
                 </div>

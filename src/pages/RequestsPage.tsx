@@ -26,7 +26,7 @@ const brandIcons: Record<string, { bg: string; char: string }> = {
 
 export default function RequestsPage({ onNavigate, onNewAnalysis }: RequestsPageProps) {
   return (
-    <div className="dark">
+    <div>
       <ShaderBackground opacity={40} />
       <Sidebar activeItem="requests" onNavigate={onNavigate} onNewAnalysis={onNewAnalysis} />
       <TopNav avatarUrl="https://lh3.googleusercontent.com/aida-public/AB6AXuAsl6oqHJA5QTo39561LQg3z2l5CmpLpUvvI0Pry_A77pDXwegYuePfpPpwCmh69NxI3IDlL8wcSuOYBx6tmR30fDAQ2xnejMx46cbIigcyigqbjOaKekGiHV9j5BMku5hcOTFZcTkn40U2zFOKe30wG85AdBDGBXFvYsm7xHJXoY7gkW9PHFZgciJ5ftjnWQipUrkAdt6W_9sii8Pbklq-g1rPwV4QvB5oELXm1PRVfQs39mvePGHxfN6n-9UTLkuLLScK_iOLP4db" />
@@ -60,7 +60,7 @@ export default function RequestsPage({ onNavigate, onNewAnalysis }: RequestsPage
                 <p className="font-display text-5xl font-black text-white">86</p>
                 <span className="text-on-surface/40 font-bold">/100</span>
               </div>
-              <div className="w-full bg-black/40 h-2 rounded-full mt-3">
+              <div className="w-full bg-gray-300 dark:bg-black/40 h-2 rounded-full mt-3">
                 <div className="bg-primary h-full rounded-full" style={{ width: '86%' }} />
               </div>
             </div>
@@ -104,7 +104,7 @@ export default function RequestsPage({ onNavigate, onNewAnalysis }: RequestsPage
                       </td>
                       <td className="px-7 py-5">
                         <div className="flex items-center gap-3">
-                          <div className="w-24 bg-black/40 h-2 rounded-full overflow-hidden border border-white/10">
+                          <div className="w-24 bg-gray-300 dark:bg-black/40 h-2 rounded-full overflow-hidden border border-black/20 dark:border-white/10">
                             <div className={`h-full rounded-full ${req.barColor}`} style={{ width: `${req.fit}%` }} />
                           </div>
                           <span className="font-mono font-black text-white">{req.fit}%</span>

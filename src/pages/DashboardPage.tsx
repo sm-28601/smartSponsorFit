@@ -75,7 +75,7 @@ export default function DashboardPage({ onNavigate, onNewAnalysis }: DashboardPa
   ];
 
   return (
-    <div className="dark">
+    <div>
       <ShaderBackground opacity={40} />
       <Sidebar activeItem="dashboard" onNavigate={onNavigate} onNewAnalysis={onNewAnalysis} />
       <TopNav />
@@ -101,7 +101,7 @@ export default function DashboardPage({ onNavigate, onNewAnalysis }: DashboardPa
             }}>
               <div className="flex justify-between items-start mb-4">
                 <div className={`p-2 rounded-xl border-2 border-black shadow-brutal-sm ${stat.icon === Users ? 'bg-primary' : stat.icon === Eye ? 'bg-lavender' : stat.icon === Heart ? 'bg-pink' : 'bg-primary'}`}>
-                  <stat.icon className="text-black font-bold" size={20} />
+                  <stat.icon className="text-black dark:text-black font-bold" size={20} />
                 </div>
                 <span className={`${stat.changeColor} text-sm font-black`}>{stat.change}</span>
               </div>
@@ -147,7 +147,7 @@ export default function DashboardPage({ onNavigate, onNewAnalysis }: DashboardPa
                 <p className="text-xs text-on-surface/50 leading-relaxed">Authoritative, clear and technical depth.</p>
               </div>
             </div>
-            <div className="mt-12 p-8 neo-card bg-black shadow-none border-dashed">
+            <div className="mt-12 p-8 neo-card bg-white dark:bg-black shadow-none border-dashed">
               <div className="flex justify-between items-center mb-6">
                 <h4 className="font-black text-primary italic uppercase flex items-center gap-2">
                   <TrendingUp className="font-bold text-primary" size={20} />
@@ -155,7 +155,7 @@ export default function DashboardPage({ onNavigate, onNewAnalysis }: DashboardPa
                 </h4>
                 <span className="text-2xl font-black font-mono text-primary">92%</span>
               </div>
-              <div className="w-full bg-white/10 h-6 border-[3px] border-black rounded-full p-1">
+              <div className="w-full bg-gray-300 dark:bg-white/10 h-6 border-[3px] border-black rounded-full p-1">
                 <div className="bg-primary h-full rounded-full transition-all duration-1000 ease-out" style={{ width: '92%' }} />
               </div>
             </div>
@@ -170,7 +170,7 @@ export default function DashboardPage({ onNavigate, onNewAnalysis }: DashboardPa
             <p className="text-sm text-on-surface/60 mb-8 font-medium">Predict campaign compatibility with AI brand-syncing.</p>
             <div className="space-y-6 flex-1">
               <input
-                className="w-full bg-black/40 border-[3px] border-black rounded-2xl py-4 px-6 text-sm focus:outline-none focus:ring-4 focus:ring-primary/30 transition-all placeholder:text-on-surface/30 font-bold"
+                className="w-full bg-gray-200 dark:bg-black/40 border-[3px] border-black rounded-2xl py-4 px-6 text-sm focus:outline-none focus:ring-4 focus:ring-primary/30 transition-all placeholder:text-gray-500 dark:placeholder:text-on-surface/30 font-bold text-black dark:text-on-surface"
                 placeholder="BRAND URL (e.g. linear.app)"
                 type="text"
               />
@@ -184,8 +184,8 @@ export default function DashboardPage({ onNavigate, onNewAnalysis }: DashboardPa
 
               <div className="mt-8 pt-8 border-t-4 border-black border-dotted">
                 <div className="flex items-center gap-4 mb-6">
-                  <div className="w-14 h-14 rounded-2xl bg-black border-[3px] border-black shadow-brutal flex items-center justify-center overflow-hidden">
-                    <Sparkles className="text-primary" size={28} />
+                  <div className="w-14 h-14 rounded-2xl bg-black dark:bg-black border-[3px] border-black shadow-brutal flex items-center justify-center overflow-hidden">
+                    <Sparkles className="text-primary dark:text-primary" size={28} />
                   </div>
                   <div>
                     <h4 className="font-black text-lg text-on-surface">Linear</h4>
@@ -193,12 +193,12 @@ export default function DashboardPage({ onNavigate, onNewAnalysis }: DashboardPa
                   </div>
                 </div>
                 <div className="space-y-4">
-                  <div className="flex justify-between items-center bg-black/20 p-3 rounded-xl border-2 border-black">
-                    <span className="text-xs font-bold uppercase opacity-60">Alignment</span>
+                  <div className="flex justify-between items-center bg-gray-300 dark:bg-black/20 p-3 rounded-xl border-2 border-black">
+                    <span className="text-xs font-bold uppercase opacity-60 text-black dark:text-white">Alignment</span>
                     <span className="text-xs text-primary font-black">EXCELLENT</span>
                   </div>
-                  <div className="flex justify-between items-center bg-black/20 p-3 rounded-xl border-2 border-black">
-                    <span className="text-xs font-bold uppercase opacity-60">Est. ROI</span>
+                  <div className="flex justify-between items-center bg-gray-300 dark:bg-black/20 p-3 rounded-xl border-2 border-black">
+                    <span className="text-xs font-bold uppercase opacity-60 text-black dark:text-white">Est. ROI</span>
                     <span className="text-xs text-primary font-black">3.4X</span>
                   </div>
                   <div className="mt-6 p-6 rounded-2xl bg-primary border-[3px] border-black shadow-brutal-lg text-center">
@@ -219,7 +219,7 @@ export default function DashboardPage({ onNavigate, onNewAnalysis }: DashboardPa
               <h3 className="text-4xl font-black uppercase italic text-primary">Discover Brands</h3>
               <p className="text-on-surface/60 font-bold">AI curated matches for your unique profile.</p>
             </div>
-            <button className="neo-button bg-black text-white px-6 py-3 text-xs uppercase tracking-widest hover:bg-primary hover:text-black">
+            <button className="neo-button bg-primary dark:bg-black text-white dark:text-white px-6 py-3 text-xs uppercase tracking-widest hover:bg-primary hover:text-black">
               View All
             </button>
           </div>
@@ -228,7 +228,7 @@ export default function DashboardPage({ onNavigate, onNewAnalysis }: DashboardPa
               <div key={brand.name} className="neo-card p-6 bg-surface-container group">
                 <div className="flex justify-between items-start mb-8">
                   <div className={`w-14 h-14 rounded-2xl ${brand.color} border-[3px] border-black shadow-brutal flex items-center justify-center`} style={{ boxShadow: `4px 4px 0px 0px ${brand.shadowColor}` }}>
-                    <brand.icon className="text-white" size={28} strokeWidth={2} style={{ fill: 'currentColor' }} />
+                    <brand.icon className="text-white" size={28} strokeWidth={2} /*style={{ fill: 'currentColor' }}*/ />
                   </div>
                   <div className={`${brand.fitBg} px-3 py-1 rounded-full border-2 border-black text-[10px] font-black shadow-brutal-sm`}>
                     {brand.fit} FIT

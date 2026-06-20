@@ -1,4 +1,5 @@
 import { Eye, Download, Link2, Check, Plus, MapPin, BarChart3 } from 'lucide-react';
+import { useState } from 'react';
 import ShaderBackground from '../components/ShaderBackground';
 import Sidebar from '../components/Sidebar';
 
@@ -8,8 +9,32 @@ interface ExportsPageProps {
 }
 
 export default function ExportsPage({ onNavigate, onNewAnalysis }: ExportsPageProps) {
+  const [includeData, setIncludeData] = useState({
+    audienceDemographics: true,
+    brandCollaborations: false,
+    aiVerificationBadges: true,
+  });
+
+  const engagementTrend = [
+    { month: 'Jan', value: 4.2 },
+    { month: 'Feb', value: 4.8 },
+    { month: 'Mar', value: 4.5 },
+    { month: 'Apr', value: 5.4 },
+    { month: 'May', value: 5.1 },
+    { month: 'Jun', value: 6.0 },
+    { month: 'Jul', value: 6.8 },
+  ];
+  const trendPoints = engagementTrend
+    .map((point, index) => {
+      const x = 18 + index * 37;
+      const y = 112 - ((point.value - 3.5) / 3.8) * 86;
+      return `${x},${y}`;
+    })
+    .join(' ');
+  const trendAreaPoints = `18,118 ${trendPoints} 240,118`;
+
   return (
-    <div className="dark">
+    <div>
       <ShaderBackground opacity={40} />
       <Sidebar activeItem="exports" onNavigate={onNavigate} onNewAnalysis={onNewAnalysis} />
 
@@ -102,24 +127,45 @@ export default function ExportsPage({ onNavigate, onNewAnalysis }: ExportsPagePr
                               <span className="text-on-surface/70 font-bold">{d.label}</span>
                               <span className="text-white font-black">{d.pct}%</span>
                             </div>
-                            <div className="w-full bg-black/40 h-2 rounded-full">
+                            <div className="w-full bg-gray-300 dark:bg-black/40 h-2 rounded-full">
                               <div className="bg-primary h-full rounded-full" style={{ width: `${d.pct * 2}%` }} />
                             </div>
                           </div>
                         ))}
                       </div>
                     </div>
-                    <div className="neo-card bg-surface-container-high p-6">
-                      <h4 className="font-black text-white mb-4">Engagement Trend</h4>
-                      <div className="flex items-end gap-1.5 h-20">
-                        {[40, 55, 45, 60, 52, 70, 85, 90].map((h, i) => (
-                          <div key={i} className="flex-1 bg-primary/30 rounded-sm relative overflow-hidden">
-                            <div className="absolute bottom-0 left-0 right-0 bg-primary rounded-sm" style={{ height: `${h}%` }} />
-                          </div>
-                        ))}
+                    <div className="neo-card bg-surface-container-high p-6 overflow-hidden">
+                      <div className="flex items-start justify-between gap-4 mb-4">
+                        <div>
+                          <h4 className="font-black text-white">Engagement Trend</h4>
+                          <p className="text-on-surface/40 text-xs font-bold mt-1">Mock 7-month verified engagement rate</p>
+                        </div>
+                        <div className="text-right">
+                          <p className="text-primary font-black text-2xl leading-none">6.8%</p>
+                          <p className="text-on-surface/40 text-[10px] font-black uppercase">Current</p>
+                        </div>
                       </div>
-                      <div className="flex justify-between mt-2 text-on-surface/30 text-[10px] font-black">
-                        <span>JAN</span><span>JUL</span>
+                      <div className="h-36 rounded-2xl bg-black/20 border-2 border-black/20 p-3">
+                        <svg viewBox="0 0 260 130" className="w-full h-full" role="img" aria-label="Engagement trend graph">
+                          <defs>
+                            <linearGradient id="engagementFill" x1="0" x2="0" y1="0" y2="1">
+                              <stop offset="0%" stopColor="#c7f02d" stopOpacity="0.45" />
+                              <stop offset="100%" stopColor="#c7f02d" stopOpacity="0.02" />
+                            </linearGradient>
+                          </defs>
+                          {[32, 60, 88, 116].map((y) => (
+                            <line key={y} x1="12" x2="248" y1={y} y2={y} stroke="rgba(255,255,255,0.08)" strokeWidth="2" />
+                          ))}
+                          <polygon points={trendAreaPoints} fill="url(#engagementFill)" />
+                          <polyline points={trendPoints} fill="none" stroke="#c7f02d" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" />
+                          {trendPoints.split(' ').map((point) => {
+                            const [cx, cy] = point.split(',');
+                            return <circle key={point} cx={cx} cy={cy} r="5" fill="#c7f02d" stroke="#000" strokeWidth="3" />;
+                          })}
+                        </svg>
+                      </div>
+                      <div className="flex justify-between mt-2 text-on-surface/30 text-[10px] font-black uppercase">
+                        {engagementTrend.map((point) => <span key={point.month}>{point.month}</span>)}
                       </div>
                     </div>
                   </div>
@@ -195,14 +241,19 @@ export default function ExportsPage({ onNavigate, onNewAnalysis }: ExportsPagePr
                   <p className="text-label-caps text-on-surface/40 font-black mb-3">Include Data</p>
                   <div className="space-y-3">
                     {[
-                      { label: 'Audience Demographics', on: true },
-                      { label: 'Brand Collaborations', on: false },
-                      { label: 'AI Verification Badges', on: true },
+                      { key: 'audienceDemographics' as const, label: 'Audience Demographics' },
+                      { key: 'brandCollaborations' as const, label: 'Brand Collaborations' },
+                      { key: 'aiVerificationBadges' as const, label: 'AI Verification Badges' },
                     ].map((t) => (
                       <div key={t.label} className="flex items-center justify-between">
                         <span className="text-white text-sm font-bold">{t.label}</span>
-                        <button className={`w-12 h-6 rounded-full border-2 border-black relative transition-colors ${t.on ? 'bg-primary' : 'bg-surface-container-highest'}`}>
-                          <span className={`absolute top-0.5 w-4 h-4 rounded-full bg-black shadow transition-transform ${t.on ? 'translate-x-6' : 'translate-x-0.5'}`} />
+                        <button
+                          type="button"
+                          onClick={() => setIncludeData((current) => ({ ...current, [t.key]: !current[t.key] }))}
+                          className={`w-12 h-6 rounded-full border-2 border-black relative overflow-hidden transition-colors flex-shrink-0 ${includeData[t.key] ? 'bg-primary' : 'bg-surface-container-highest'}`}
+                          aria-pressed={includeData[t.key]}
+                        >
+                          <span className={`absolute left-0.5 top-0.5 w-4 h-4 rounded-full bg-black shadow transition-transform ${includeData[t.key] ? 'translate-x-6' : 'translate-x-0'}`} />
                         </button>
                       </div>
                     ))}
@@ -212,7 +263,7 @@ export default function ExportsPage({ onNavigate, onNewAnalysis }: ExportsPagePr
                 <div>
                   <p className="text-label-caps text-on-surface/40 font-black mb-3">Featured Content</p>
                   <div className="neo-card bg-surface-container-high p-4 flex items-center gap-3">
-                    <div className="w-10 h-10 bg-black/40 rounded-xl overflow-hidden flex-shrink-0 flex items-center justify-center">
+                    <div className="w-10 h-10 bg-gray-300 dark:bg-black/40 rounded-xl overflow-hidden flex-shrink-0 flex items-center justify-center">
                       <BarChart3 className="text-primary" size={18} />
                     </div>
                     <div className="flex-1 min-w-0">

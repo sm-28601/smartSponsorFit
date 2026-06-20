@@ -77,7 +77,7 @@ export default function BrandDashboardPage({ onNavigate }: BrandDashboardPagePro
   ];
 
   return (
-    <div className="dark">
+    <div>
       <ShaderBackground />
 
       {/* Side Navigation - Brand Variant */}

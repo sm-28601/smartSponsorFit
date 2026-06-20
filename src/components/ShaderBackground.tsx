@@ -1,11 +1,13 @@
 import { useEffect, useRef } from 'react';
+import { useTheme } from '../contexts/ThemeContext';
 
 export default function ShaderBackground({ opacity = 40 }: { opacity?: number }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const { theme } = useTheme();
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    if (!canvas) return;
+    if (!canvas || theme === 'light') return;
 
     function syncSize() {
       const w = canvas!.clientWidth || 1280;
@@ -95,10 +97,10 @@ void main() {
       cancelAnimationFrame(animId);
       ro.disconnect();
     };
-  }, []);
+  }, [theme]);
 
   return (
-    <div className={`fixed inset-0 -z-10 w-full h-full ${opacity < 100 ? `opacity-${opacity}` : ''}`} style={{ opacity: opacity / 100 }}>
+    <div className={`fixed inset-0 -z-10 w-full h-full ${opacity < 100 ? `opacity-${opacity}` : ''}`} style={{ opacity: theme === 'light' ? 0 : opacity / 100 }}>
       <canvas ref={canvasRef} className="block w-full h-full" />
     </div>
   );

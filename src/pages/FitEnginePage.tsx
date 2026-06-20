@@ -1,18 +1,24 @@
-import { Download, Users, Brain, Network, Sliders, BarChart3, Building2, UserSearch, Link2, AtSign, ChevronDown, CheckCircle, AlertTriangle, Lightbulb } from 'lucide-react';
+import { Download, Users, Brain, Network, Sliders, BarChart3, Building2, UserSearch, Link2, AtSign, ChevronDown, CheckCircle, AlertTriangle, Lightbulb, History } from 'lucide-react';
 import ShaderBackground from '../components/ShaderBackground';
 import Sidebar from '../components/Sidebar';
 import TopNav from '../components/TopNav';
 import { useState, useEffect } from 'react';
+import { findBrand, findCreator, generateFitAnalysis, type FitAnalysis } from '../utils/fitScoring';
 
 interface FitEnginePageProps {
   onNavigate: (page: string) => void;
   onNewAnalysis?: () => void;
 }
 
+type FitHistoryItem = FitAnalysis & {
+  checkedAt: string;
+};
+
 export default function FitEnginePage({ onNavigate, onNewAnalysis }: FitEnginePageProps) {
   const [activeTab, setActiveTab] = useState<'brand' | 'creator'>('brand');
-  const [brandUrl, setBrandUrl] = useState('https://acme-global.com');
+  const [brandUrl, setBrandUrl] = useState('');
   const [creatorHandle, setCreatorHandle] = useState('');
+  const [inputError, setInputError] = useState('');
   const [analyzing, setAnalyzing] = useState(false);
   const [showPipeline, setShowPipeline] = useState(false);
   const [pipelineStage, setPipelineStage] = useState(0);
@@ -20,6 +26,8 @@ export default function FitEnginePage({ onNavigate, onNewAnalysis }: FitEnginePa
   const [gaugeScore, setGaugeScore] = useState(0);
   const [detailsOpen, setDetailsOpen] = useState(false);
   const [sectionVisible, setSectionVisible] = useState(false);
+  const [fitAnalysis, setFitAnalysis] = useState<FitAnalysis | null>(null);
+  const [analysisHistory, setAnalysisHistory] = useState<FitHistoryItem[]>([]);
 
   useEffect(() => {
     const t = setTimeout(() => setSectionVisible(true), 100);
@@ -27,9 +35,9 @@ export default function FitEnginePage({ onNavigate, onNewAnalysis }: FitEnginePa
   }, []);
 
   useEffect(() => {
-    const t = setTimeout(() => animateGauge(89), 500);
+    const t = setTimeout(() => animateGauge(fitAnalysis?.overallFitScore ?? 0), 500);
     return () => clearTimeout(t);
-  }, []);
+  }, [fitAnalysis?.overallFitScore]);
 
   function animateGauge(finalScore: number) {
     let current = 0;
@@ -47,10 +55,27 @@ export default function FitEnginePage({ onNavigate, onNewAnalysis }: FitEnginePa
   }
 
   function simulateAnalysis() {
+    if (!brandUrl.trim() || !creatorHandle.trim()) {
+      setInputError('Add both a brand and creator before running analysis.');
+      return;
+    }
+
+    const brand = findBrand(brandUrl);
+    const creator = findCreator(creatorHandle);
+
+    if (!brand || !creator) {
+      setInputError('No profile found in prototype dataset.');
+      return;
+    }
+
+    const generatedAnalysis = generateFitAnalysis(brand, creator);
+
+    setInputError('');
     setAnalyzing(true);
     setResultsBlurred(true);
     setShowPipeline(true);
     setPipelineStage(0);
+    setGaugeScore(0);
 
     const stages = [0, 1, 2, 3, 4];
     let i = 0;
@@ -61,10 +86,15 @@ export default function FitEnginePage({ onNavigate, onNewAnalysis }: FitEnginePa
       } else {
         clearInterval(interval);
         setTimeout(() => {
+          setFitAnalysis(generatedAnalysis);
+          setAnalysisHistory((current) => [
+            { ...generatedAnalysis, checkedAt: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) },
+            ...current.filter((item) => `${item.brand.name}-${item.creator.handle}` !== `${generatedAnalysis.brand.name}-${generatedAnalysis.creator.handle}`),
+          ].slice(0, 3));
           setAnalyzing(false);
           setResultsBlurred(false);
           setShowPipeline(false);
-          animateGauge(89);
+          animateGauge(generatedAnalysis.overallFitScore);
         }, 500);
       }
     }, 800);
@@ -79,9 +109,18 @@ export default function FitEnginePage({ onNavigate, onNewAnalysis }: FitEnginePa
   ];
 
   const gaugeOffset = 440 - (gaugeScore / 100) * 440;
+  const scoreLabel = fitAnalysis
+    ? fitAnalysis.overallFitScore >= 85
+      ? 'Optimal'
+      : fitAnalysis.overallFitScore >= 65
+        ? 'Strong'
+        : fitAnalysis.overallFitScore >= 45
+          ? 'Selective'
+          : 'Low Fit'
+    : 'Awaiting';
 
   return (
-    <div className="dark">
+    <div>
       <ShaderBackground />
       <Sidebar activeItem="fit-engine" onNavigate={onNavigate} onNewAnalysis={onNewAnalysis} />
       <TopNav />
@@ -127,7 +166,12 @@ export default function FitEnginePage({ onNavigate, onNewAnalysis }: FitEnginePa
                   className="w-full bg-white border-[3px] border-black rounded-xl pl-12 pr-4 py-4 focus:ring-0 focus:outline-none text-black font-bold transition-all"
                   type="text"
                   value={brandUrl}
-                  onChange={(e) => setBrandUrl(e.target.value)}
+                  placeholder="brand.com or @brand"
+                  aria-invalid={inputError && !brandUrl.trim() ? 'true' : 'false'}
+                  onChange={(e) => {
+                    setBrandUrl(e.target.value);
+                    if (inputError) setInputError('');
+                  }}
                 />
               </div>
             </div>
@@ -140,17 +184,26 @@ export default function FitEnginePage({ onNavigate, onNewAnalysis }: FitEnginePa
                   placeholder="@creator_handle"
                   type="text"
                   value={creatorHandle}
-                  onChange={(e) => setCreatorHandle(e.target.value)}
+                  aria-invalid={inputError && !creatorHandle.trim() ? 'true' : 'false'}
+                  onChange={(e) => {
+                    setCreatorHandle(e.target.value);
+                    if (inputError) setInputError('');
+                  }}
                 />
               </div>
             </div>
           </div>
 
-          <div className="mt-8 flex justify-end">
+          <div className="mt-8 flex flex-col items-end gap-3">
+            {inputError && (
+              <p className="text-sm text-black font-black uppercase tracking-tight" role="alert">
+                {inputError}
+              </p>
+            )}
             <button
               onClick={simulateAnalysis}
-              disabled={analyzing}
-              className="px-12 py-4 bg-black text-primary font-black rounded-full neo-button flex items-center gap-3 uppercase italic tracking-wider disabled:opacity-80 disabled:cursor-not-allowed"
+              disabled={analyzing || !brandUrl.trim() || !creatorHandle.trim()}
+              className="fit-engine-analyze-button px-12 py-4 bg-black dark:bg-black text-primary dark:text-primary font-black rounded-full neo-button flex items-center gap-3 uppercase italic tracking-wider disabled:opacity-80 disabled:cursor-not-allowed"
             >
               {analyzing ? (
                 <>
@@ -165,17 +218,58 @@ export default function FitEnginePage({ onNavigate, onNewAnalysis }: FitEnginePa
           </div>
         </section>
 
+        {analysisHistory.length > 0 && (
+          <section className="neo-card bg-white p-6 mb-12" style={{
+            opacity: sectionVisible ? 1 : 0,
+            transform: sectionVisible ? 'translateY(0)' : 'translateY(20px)',
+            transition: 'all 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.2s',
+          }}>
+            <div className="flex items-center justify-between gap-4 mb-5">
+              <div className="flex items-center gap-3">
+                <History className="text-black" size={22} strokeWidth={3} />
+                <h3 className="font-label-caps text-black uppercase font-black tracking-widest">Recent Checks</h3>
+              </div>
+              <span className="text-[10px] font-black text-black/50 uppercase tracking-widest">Latest 3</span>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {analysisHistory.map((item) => (
+                <button
+                  key={`${item.brand.name}-${item.creator.handle}-${item.checkedAt}`}
+                  onClick={() => {
+                    setFitAnalysis(item);
+                    setGaugeScore(0);
+                    animateGauge(item.overallFitScore);
+                  }}
+                  className="neo-button bg-surface-container-high p-4 text-left rounded-2xl border-[3px] border-black hover:bg-primary min-w-0"
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="min-w-0">
+                      <p className="text-black font-black uppercase truncate">{item.brand.name}</p>
+                      <p className="text-black/60 text-xs font-bold truncate">{item.creator.handle}</p>
+                    </div>
+                    <span className="text-black font-mono font-black text-xl flex-shrink-0">{item.overallFitScore}</span>
+                  </div>
+                  <div className="mt-3 flex items-center justify-between gap-3 text-[10px] font-black uppercase text-black/50">
+                    <span>${item.predictedCpm.toFixed(2)} CPM</span>
+                    <span>{item.checkedAt}</span>
+                  </div>
+                </button>
+              ))}
+            </div>
+          </section>
+        )}
+
         {/* Pipeline Section */}
         {showPipeline && (
           <section className="neo-card bg-white p-12 mb-12 text-center">
             <h3 className="font-label-caps text-black tracking-[0.4em] font-black uppercase mb-12">Neural Processing Pipeline</h3>
             <div className="flex items-center justify-between max-w-4xl mx-auto relative">
-              <div className="absolute top-1/2 left-0 w-full h-1 bg-black -translate-y-1/2 z-0" />
+              <div className="absolute top-1/2 left-0 w-full h-1 bg-black dark:bg-black -translate-y-1/2 z-0" />
               <div className="absolute top-1/2 left-0 w-full h-1 pipeline-line -translate-y-1/2 z-0" />
               {pipelineSteps.map((step, i) => (
                 <div key={step.label} className={`relative z-10 flex flex-col items-center gap-3 transition-all duration-300 ${i < pipelineStage ? '' : 'opacity-40'}`}>
                   <div className={`w-14 h-14 rounded-full border-4 border-black flex items-center justify-center ${i < pipelineStage ? 'bg-primary' : 'bg-white'}`}>
-                    <step.icon className="text-black" size={24} strokeWidth={3} />
+                    <step.icon className="text-black dark:text-black" size={24} strokeWidth={3} />
                   </div>
                   <span className="text-[10px] font-black font-mono text-black uppercase">{step.label}</span>
                 </div>
@@ -210,37 +304,53 @@ export default function FitEnginePage({ onNavigate, onNewAnalysis }: FitEnginePa
                 </svg>
                 <div className="z-10 flex flex-col items-center">
                   <span className="font-display text-[64px] font-black text-black leading-none">{gaugeScore}</span>
-                  <span className="font-label-caps text-black/60 font-black tracking-widest mt-2 uppercase">Optimal</span>
+                  <span className="font-label-caps text-black/60 font-black tracking-widest mt-2 uppercase">{scoreLabel}</span>
                 </div>
               </div>
-              <p className="mt-8 text-sm text-black font-bold italic">High confidence level (0.94) based on historical cross-campaign data.</p>
+              <p className="mt-8 text-sm text-black font-bold italic">
+                {fitAnalysis
+                  ? `Confidence level (${fitAnalysis.confidence}) based on prototype creator-brand signals.`
+                  : 'Enter a known brand and creator to generate prototype fit intelligence.'}
+              </p>
             </div>
 
             {/* Explanation Cards */}
             <div className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-3 gap-6">
               <div className="neo-card bg-primary p-6">
                 <div className="flex justify-between items-start mb-4">
-                  <Users className="text-black" size={20} strokeWidth={3} />
-                  <span className="font-mono text-black font-black">92%</span>
+                  <Users className="text-black dark:text-black" size={20} strokeWidth={3} />
+                  <span className="font-mono text-black font-black">{fitAnalysis ? `${fitAnalysis.audienceMatch}%` : '--'}</span>
                 </div>
                 <h4 className="font-black text-black uppercase mb-2">Audience</h4>
-                <p className="text-sm text-black/80 font-bold">Overlapping demographic clusters in tech-focused Gen-Z verticals. Minimal saturation risk.</p>
+                <p className="text-sm text-black/80 font-bold">
+                  {fitAnalysis
+                    ? `Overlap across ${fitAnalysis.brand.audience.slice(0, 2).join(' and ')} with ${fitAnalysis.creator.handle}'s active audience.`
+                    : 'Audience compatibility will appear after analysis.'}
+                </p>
               </div>
               <div className="neo-card bg-tertiary p-6">
                 <div className="flex justify-between items-start mb-4">
-                  <BarChart3 className="text-black" size={20} strokeWidth={3} />
-                  <span className="font-mono text-black font-black">84%</span>
+                  <BarChart3 className="text-black dark:text-black" size={20} strokeWidth={3} />
+                  <span className="font-mono text-black font-black">{fitAnalysis ? `${fitAnalysis.toneMatch}%` : '--'}</span>
                 </div>
                 <h4 className="font-black text-black uppercase mb-2">Tone</h4>
-                <p className="text-sm text-black/80 font-bold">Semantic analysis reveals 84% brand voice compatibility. High alignment in "Educational Tech" niches.</p>
+                <p className="text-sm text-black/80 font-bold">
+                  {fitAnalysis
+                    ? `Voice compatibility across ${fitAnalysis.brand.tone.slice(0, 2).join(' and ')} brand signals.`
+                    : 'Tone compatibility will appear after analysis.'}
+                </p>
               </div>
               <div className="neo-card bg-secondary p-6">
                 <div className="flex justify-between items-start mb-4">
-                  <Sliders className="text-black" size={20} strokeWidth={3} />
-                  <span className="font-mono text-black font-black">88%</span>
+                  <Sliders className="text-black dark:text-black" size={20} strokeWidth={3} />
+                  <span className="font-mono text-black font-black">{fitAnalysis ? `${fitAnalysis.engagementPrediction}%` : '--'}</span>
                 </div>
                 <h4 className="font-black text-black uppercase mb-2">Engagement</h4>
-                <p className="text-sm text-black/80 font-bold">Historical conversion coefficients suggest a 1.4x uplift over standard baseline benchmarks.</p>
+                <p className="text-sm text-black/80 font-bold">
+                  {fitAnalysis
+                    ? `${fitAnalysis.creator.engagementLevel.toUpperCase()} engagement profile with an estimated ${fitAnalysis.predictedCpm.toFixed(2)} CPM.`
+                    : 'Engagement prediction will appear after analysis.'}
+                </p>
               </div>
             </div>
           </div>
@@ -272,24 +382,32 @@ export default function FitEnginePage({ onNavigate, onNewAnalysis }: FitEnginePa
                   <div className="space-y-4">
                     <h5 className="font-label-caps text-black font-black uppercase">Competitive Advantage</h5>
                     <p className="text-body-md text-black font-bold">
-                      The creator's unique positioning in <span className="bg-primary border-2 border-black px-2 rounded text-black font-black">Sustainable Hardware</span> mirrors your upcoming product roadmap. This alignment is significantly higher than 92% of creators in this category.
+                      {fitAnalysis ? (
+                        <>
+                          <span className="bg-primary border-2 border-black px-2 rounded text-black font-black">{fitAnalysis.creator.niche}</span> gives {fitAnalysis.brand.name} a prototype advantage. {fitAnalysis.advantage}
+                        </>
+                      ) : (
+                        'Run a match to surface the strongest creator-brand advantage.'
+                      )}
                     </p>
                     <div className="flex items-center gap-3 p-4 bg-secondary border-[3px] border-black rounded-xl">
-                      <Lightbulb className="text-black" size={20} strokeWidth={3} />
-                      <p className="text-sm text-black font-bold">AI Recommendation: Focus outreach on "Future of Mobility" themes.</p>
+                      <Lightbulb className="text-black dark:text-black" size={20} strokeWidth={3} />
+                      <p className="text-sm text-black font-bold">
+                        AI Recommendation: {fitAnalysis ? fitAnalysis.recommendationSummary : 'Choose a creator and brand to generate a recommendation.'}
+                      </p>
                     </div>
                   </div>
                   <div className="space-y-4">
                     <h5 className="font-label-caps text-black font-black uppercase">Risk Assessment</h5>
                     <ul className="space-y-3">
                       <li className="flex items-center gap-3 text-sm font-bold text-black">
-                        <CheckCircle className="text-black" size={18} strokeWidth={3} /> Zero recent competitive brand partnerships
+                        <CheckCircle className="text-black" size={18} strokeWidth={3} /> Brand safety score: {fitAnalysis ? `${fitAnalysis.brandSafetyScore}%` : '--'}
                       </li>
                       <li className="flex items-center gap-3 text-sm font-bold text-black">
-                        <CheckCircle className="text-black" size={18} strokeWidth={3} /> High comment sentiment score (0.88)
+                        <CheckCircle className="text-black" size={18} strokeWidth={3} /> Follower base: {fitAnalysis ? fitAnalysis.creator.followerCount.toLocaleString() : '--'}
                       </li>
                       <li className="flex items-center gap-3 text-sm font-bold text-black">
-                        <AlertTriangle className="text-tertiary" size={18} strokeWidth={3} style={{ filter: 'drop-shadow(1px 1px 0 #000)' }} /> Slight audience overlap with existing campaign 04
+                        <AlertTriangle className="text-tertiary" size={18} strokeWidth={3} style={{ filter: 'drop-shadow(1px 1px 0 #000)' }} /> {fitAnalysis ? fitAnalysis.riskNote : 'Risk assessment pending'}
                       </li>
                     </ul>
                   </div>
@@ -307,21 +425,27 @@ export default function FitEnginePage({ onNavigate, onNewAnalysis }: FitEnginePa
             <div className="neo-card bg-primary p-6 flex flex-col justify-between">
               <p className="font-label-caps text-black font-black uppercase">Predicted CPM</p>
               <div className="mt-4">
-                <span className="font-display text-h2 text-black italic">$12.40</span>
-                <span className="text-black/60 text-[12px] ml-2 font-black font-mono">-$2.10 VS AVG</span>
+                <span className="font-display text-h2 text-black italic">{fitAnalysis ? `$${fitAnalysis.predictedCpm.toFixed(2)}` : '--'}</span>
+                <span className="text-black/60 text-[12px] ml-2 font-black font-mono">
+                  {fitAnalysis ? `$${fitAnalysis.creator.estimatedCpm.toFixed(2)} BASE` : 'BASE'}
+                </span>
               </div>
             </div>
             <div className="neo-card bg-tertiary p-6 flex flex-col justify-between">
               <p className="font-label-caps text-black font-black uppercase">Conversion Est.</p>
               <div className="mt-4">
-                <span className="font-display text-h2 text-black italic">4.8%</span>
-                <span className="text-black/60 text-[12px] ml-2 font-black font-mono">+1.2%</span>
+                <span className="font-display text-h2 text-black italic">
+                  {fitAnalysis ? `${(fitAnalysis.engagementPrediction / 18).toFixed(1)}%` : '--'}
+                </span>
+                <span className="text-black/60 text-[12px] ml-2 font-black font-mono">
+                  {fitAnalysis ? `${fitAnalysis.overallFitScore}% FIT` : 'FIT'}
+                </span>
               </div>
             </div>
             <div className="md:col-span-2 neo-card bg-white p-6 flex flex-col justify-between">
               <p className="font-label-caps text-black font-black uppercase">Top Keyword Match</p>
               <div className="mt-4 flex flex-wrap gap-2">
-                {['Minimalism', 'Productivity', 'Premium Tech', 'Workflow'].map((kw) => (
+                {(fitAnalysis?.topKeywordMatches ?? ['Awaiting', 'Prototype', 'Match', 'Signals']).map((kw) => (
                   <span key={kw} className={`border-2 border-black px-3 py-1 rounded-full text-sm text-black font-black ${kw === 'Productivity' ? 'bg-secondary' : kw === 'Premium Tech' ? 'bg-tertiary' : 'bg-primary'}`}>
                     {kw}
                   </span>

@@ -4,29 +4,126 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  /* Light mode colors (default) */
+  --color-surface: #f5f1e8;
+  --color-surface-dim: #ede7dc;
+  --color-surface-bright: #ffffff;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-low: #ffffff;
+  --color-surface-container: #ffffff;
+  --color-surface-container-high: #faf7f0;
+  --color-surface-container-highest: #ede7dc;
+  --color-on-surface: #1a1815;
+  --color-on-surface-variant: #52504a;
+  --color-on-surface-alt: #2b2723;
+  --color-outline: #000000;
+  --color-outline-variant: #d5cfc5;
+  --color-background: #f5f1e8;
+  --color-input-bg: #ffffff;
+  --color-input-border: #000000;
+  --color-input-text: #1a1815;
+  --color-input-placeholder: #8a8680;
+}
+
+:root.dark {
+  /* Dark mode colors */
+  --color-surface: #121409;
+  --color-surface-dim: #121409;
+  --color-surface-bright: #383a2d;
+  --color-surface-container-lowest: #0d0f05;
+  --color-surface-container-low: #1a1d11;
+  --color-surface-container: #1a1d11;
+  --color-surface-container-high: #2b2f1d;
+  --color-surface-container-highest: #363a25;
+  --color-on-surface: #dae2fd;
+  --color-on-surface-variant: #c7c8b7;
+  --color-on-surface-alt: #e4e3d6;
+  --color-outline: #908fa0;
+  --color-outline-variant: #46483c;
+  --color-background: #121409;
+  --color-input-bg: #1a1d11;
+  --color-input-border: #000000;
+  --color-input-text: #dae2fd;
+  --color-input-placeholder: #8a8680;
+}
+
 body {
-  background-color: #121409;
-  color: #dae2fd;
+  background-color: var(--color-background);
+  color: var(--color-on-surface);
   font-family: 'Space Grotesk', sans-serif;
   overflow-x: hidden;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Light mode specific styles */
+/*:not(.dark) {
+  color: var(--color-on-surface);
+}*/
+
+:not(.dark) * {
+  border-color: inherit;
+}
+
+:not(.dark) input,
+:not(.dark) textarea,
+:not(.dark) select {
+  background-color: var(--color-input-bg) !important;
+  color: var(--color-input-text) !important;
+  border-color: var(--color-input-border) !important;
+}
+
+:not(.dark) input::placeholder,
+:not(.dark) textarea::placeholder {
+  color: var(--color-input-placeholder) !important;
+}
+
+:not(.dark) button,
+:not(.dark) [role="button"] {
+  color: var(--color-on-surface) !important;
+}
+
+:not(.dark) .fit-engine-analyze-button {
+    color: #f7f7ef !important;
+    border-color: #f7f7ef !important;
+}
+
+:not(.dark) h1,
+:not(.dark) h2,
+:not(.dark) h3,
+:not(.dark) h4,
+:not(.dark) h5,
+:not(.dark) h6,
+:not(.dark) p,
+:not(.dark) span,
+:not(.dark) a,
+:not(.dark) li,
+:not(.dark) label {
+  color: var(--color-on-surface) !important;
 }
 
 @layer components {
   .neo-card {
-    @apply bg-surface-container border-[3px] border-black rounded-3xl shadow-brutal-lg transition-all duration-200;
+    @apply bg-white border-[3px] border-black rounded-3xl shadow-brutal-lg transition-all duration-200;
   }
   .neo-card:hover {
     @apply -translate-x-[2px] -translate-y-[2px];
     box-shadow: 10px 10px 0px 0px rgba(0,0,0,1);
   }
+  .dark .neo-card {
+    @apply bg-surface-container;
+  }
   .neo-card-lime {
-    @apply bg-primary text-black;
+    @apply bg-primary text-black border-[3px] border-black;
   }
   .neo-card-pink {
-    @apply bg-pink text-black;
+    @apply bg-pink text-black border-[3px] border-black;
+  }
+  .neo-card-purple {
+    @apply bg-lavender text-black border-[3px] border-black;
   }
   .neo-button {
-    @apply border-[3px] border-black shadow-brutal rounded-full font-bold transition-all duration-100;
+    @apply border-[3px] border-black shadow-brutal rounded-full font-bold transition-all duration-100 text-black;
   }
   .neo-button:hover {
     @apply -translate-x-[2px] -translate-y-[2px];
@@ -34,6 +131,9 @@ body {
   }
   .neo-button:active {
     @apply translate-x-[2px] translate-y-[2px] shadow-none;
+  }
+  .dark .neo-button {
+    @apply text-on-surface;
   }
   .gradient-text {
     @apply text-primary;
@@ -51,6 +151,16 @@ body {
   background: black;
   border: 2px solid #c7f02d;
   border-radius: 10px;
+}
+
+body.dark .custom-scrollbar::-webkit-scrollbar-thumb {
+  background: black;
+  border: 2px solid #c7f02d;
+}
+
+body:not(.dark) .custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #333;
+  border: 2px solid #c7f02d;
 }
 
 .grid-overlay {

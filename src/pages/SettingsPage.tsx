@@ -18,6 +18,11 @@ export default function SettingsPage({ onNavigate, onNewAnalysis }: SettingsPage
   const [email, setEmail] = useState('alex@creatorfit.ai');
   const [location, setLocation] = useState('Berlin, Germany');
   const [saved, setSaved] = useState(false);
+  const [aiPreferences, setAiPreferences] = useState({
+    pitchDrafts: true,
+    smartNotifications: true,
+    profileTips: true,
+  });
 
   const handleSave = () => {
     setSaved(true);
@@ -32,7 +37,7 @@ export default function SettingsPage({ onNavigate, onNewAnalysis }: SettingsPage
   ];
 
   return (
-    <div className="dark">
+    <div>
       <ShaderBackground opacity={40} />
       <Sidebar activeItem="settings" onNavigate={onNavigate} onNewAnalysis={onNewAnalysis} />
       <TopNav
@@ -136,7 +141,7 @@ export default function SettingsPage({ onNavigate, onNewAnalysis }: SettingsPage
                     {['YouTube', 'Instagram', 'TikTok', 'Twitter/X', 'LinkedIn'].map((platform) => (
                       <div key={platform} className="flex items-center justify-between p-4 neo-card bg-surface-container-high">
                         <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 bg-black/40 rounded-xl flex items-center justify-center">
+                          <div className="w-10 h-10 bg-gray-300 dark:bg-black/40 rounded-xl flex items-center justify-center">
                             <Share2 className="text-primary" size={18} />
                           </div>
                           <div>
@@ -154,17 +159,22 @@ export default function SettingsPage({ onNavigate, onNewAnalysis }: SettingsPage
                   <div className="space-y-6">
                     <h3 className="font-black text-white text-xl">AI Behavior Settings</h3>
                     {[
-                      { label: 'Auto-generate pitch drafts', desc: 'Let the AI create initial pitch templates for new brand matches.' },
-                      { label: 'Smart notifications', desc: 'Receive AI-powered alerts when high-fit brands become available.' },
-                      { label: 'Profile optimization tips', desc: 'Daily AI suggestions to improve your creator profile score.' },
+                      { key: 'pitchDrafts' as const, label: 'Auto-generate pitch drafts', desc: 'Let the AI create initial pitch templates for new brand matches.' },
+                      { key: 'smartNotifications' as const, label: 'Smart notifications', desc: 'Receive AI-powered alerts when high-fit brands become available.' },
+                      { key: 'profileTips' as const, label: 'Profile optimization tips', desc: 'Daily AI suggestions to improve your creator profile score.' },
                     ].map((pref) => (
                       <div key={pref.label} className="flex items-start justify-between gap-4 p-5 neo-card bg-surface-container-high">
                         <div>
                           <p className="font-black text-white">{pref.label}</p>
                           <p className="text-on-surface/40 text-sm font-bold mt-1">{pref.desc}</p>
                         </div>
-                        <button className="w-12 h-6 rounded-full bg-primary border-2 border-black relative flex-shrink-0 mt-1">
-                          <span className="absolute top-0.5 right-0.5 w-4 h-4 rounded-full bg-black" />
+                        <button
+                          type="button"
+                          onClick={() => setAiPreferences((current) => ({ ...current, [pref.key]: !current[pref.key] }))}
+                          className={`w-12 h-6 rounded-full border-2 border-black relative overflow-hidden flex-shrink-0 mt-1 transition-colors ${aiPreferences[pref.key] ? 'bg-primary' : 'bg-surface-container-highest'}`}
+                          aria-pressed={aiPreferences[pref.key]}
+                        >
+                          <span className={`absolute left-0.5 top-0.5 w-4 h-4 rounded-full bg-black transition-transform ${aiPreferences[pref.key] ? 'translate-x-6' : 'translate-x-0'}`} />
                         </button>
                       </div>
                     ))}

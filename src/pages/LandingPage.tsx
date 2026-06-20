@@ -26,7 +26,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
   const heroWords = ['FIND', 'THE', 'PERFECT', 'CREATOR-BRAND', 'MATCH', 'WITH', 'AI'];
 
   return (
-    <div className="dark">
+    <div>
       <ShaderBackground opacity={40} />
       <div className="fixed inset-0 -z-[5] grid-overlay" />
 

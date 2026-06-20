@@ -19,7 +19,7 @@ export default function Sidebar({ activeItem, onNavigate, onNewAnalysis, variant
   ];
 
   return (
-    <aside className="fixed left-0 top-0 h-full w-sidebar-width bg-black/40 backdrop-blur-xl border-r-4 border-black flex flex-col gap-stack-sm py-8 z-50">
+    <aside className="fixed left-0 top-0 h-full w-sidebar-width bg-white dark:bg-black/40 backdrop-blur-xl border-r-4 border-black flex flex-col gap-stack-sm py-8 z-50 transition-colors duration-300">
       <div className="px-6 mb-8">
         <div className="flex items-center gap-3">
           <div className="w-12 h-12 rounded-2xl bg-primary border-[3px] border-black shadow-brutal flex items-center justify-center">
@@ -43,7 +43,7 @@ export default function Sidebar({ activeItem, onNavigate, onNewAnalysis, variant
               className={`px-4 py-3 mx-2 flex items-center gap-3 font-bold transition-all duration-200 ${
                 activeItem === item.id
                   ? 'bg-primary text-black border-2 border-black rounded-xl'
-                  : 'text-on-surface/60 hover:text-primary hover:bg-white/5 rounded-xl'
+                  : 'text-black dark:text-on-surface/60 hover:text-primary dark:hover:text-primary hover:bg-black/5 dark:hover:bg-white/5 rounded-xl'
               }`}
             >
               <item.icon size={20} />
@@ -60,11 +60,11 @@ export default function Sidebar({ activeItem, onNavigate, onNewAnalysis, variant
         </button>
       </div>
 
-      <div className="mt-6 pt-6 border-t-2 border-black/20">
-        <button className="text-on-surface-variant hover:text-on-surface px-4 py-2 mx-2 transition-all duration-200 flex items-center gap-3 text-sm font-bold w-full">
+      <div className="mt-6 pt-6 border-t-2 border-black/20 dark:border-black/20">
+        <button className="text-black dark:text-on-surface-variant hover:text-primary dark:hover:text-on-surface px-4 py-2 mx-2 transition-all duration-200 flex items-center gap-3 text-sm font-bold w-full">
           <HelpCircle size={18} /> Help Center
         </button>
-        <button className="text-on-surface-variant hover:text-on-surface px-4 py-2 mx-2 transition-all duration-200 flex items-center gap-3 text-sm font-bold w-full">
+        <button className="text-black dark:text-on-surface-variant hover:text-primary dark:hover:text-on-surface px-4 py-2 mx-2 transition-all duration-200 flex items-center gap-3 text-sm font-bold w-full">
           <LogOut size={18} /> Sign Out
         </button>
       </div>
