@@ -9,13 +9,14 @@ interface DashboardPageProps {
   onNewAnalysis?: () => void;
 }
 
-function animateValue(el: HTMLElement, start: number, end: number, duration: number) {
+function animateValue(el: HTMLElement, start: number, end: number, duration: number, suffix = '') {
   let startTimestamp: number | null = null;
   const step = (timestamp: number) => {
     if (!startTimestamp) startTimestamp = timestamp;
     const progress = Math.min((timestamp - startTimestamp) / duration, 1);
     const currentVal = progress * (end - start) + start;
-    el.innerHTML = currentVal % 1 === 0 ? Math.floor(currentVal).toString() : currentVal.toFixed(1);
+    const displayValue = currentVal % 1 === 0 ? Math.floor(currentVal).toString() : currentVal.toFixed(1);
+    el.innerHTML = `${displayValue}${suffix}`;
     if (progress < 1) requestAnimationFrame(step);
   };
   requestAnimationFrame(step);
@@ -35,8 +36,10 @@ export default function DashboardPage({ onNavigate, onNewAnalysis }: DashboardPa
   useEffect(() => {
     const counters = document.querySelectorAll('[data-count]');
     counters.forEach((el) => {
-      const val = parseFloat((el as HTMLElement).getAttribute('data-count') || '0');
-      setTimeout(() => animateValue(el as HTMLElement, 0, val, 1500), 800);
+      const targetValue = (el as HTMLElement).getAttribute('data-count') || '0';
+      const suffix = targetValue.replace(/^[\d.]+/, '');
+      const numericValue = parseFloat(targetValue) || 0;
+      setTimeout(() => animateValue(el as HTMLElement, 0, numericValue, 1500, suffix), 800);
     });
   }, []);
 
@@ -61,9 +64,9 @@ export default function DashboardPage({ onNavigate, onNewAnalysis }: DashboardPa
   };
 
   const stats = [
-    { icon: Users, label: 'Subscribers', value: '1.2M', dataCount: '1.2', change: '+12%', changeColor: 'text-primary' },
-    { icon: Eye, label: 'Avg Views', value: '342K', dataCount: '342', change: '+5.4%', changeColor: 'text-primary' },
-    { icon: Heart, label: 'Engagement', value: '4.8%', dataCount: '4.8', change: '0.0%', changeColor: 'text-on-surface/40' },
+    { icon: Users, label: 'Subscribers', value: '1.2M', dataCount: '1.2M', change: '+12%', changeColor: 'text-primary' },
+    { icon: Eye, label: 'Avg Views', value: '342K', dataCount: '342K', change: '+5.4%', changeColor: 'text-primary' },
+    { icon: Heart, label: 'Engagement', value: '4.8%', dataCount: '4.8%', change: '0.0%', changeColor: 'text-on-surface/40' },
     { icon: Handshake, label: 'Matches', value: '28', dataCount: '28', change: '+2', changeColor: 'text-primary' },
   ];
 
