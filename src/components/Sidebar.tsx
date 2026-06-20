@@ -26,7 +26,7 @@ export default function Sidebar({ activeItem, onNavigate, onNewAnalysis, variant
             <Sparkles className="text-black" size={28} strokeWidth={2.5} />
           </div>
           <div>
-            <h1 className="font-display text-2xl font-bold text-primary tracking-tight leading-none uppercase">CreatorFit</h1>
+            <h1 className="font-display text-1xl font-bold text-primary tracking-tight leading-none uppercase">SmartSponsorFit</h1>
             <p className="text-[10px] uppercase tracking-widest text-primary/60 font-bold">
               {variant === 'brand' ? 'Hack_V.01' : 'Visionary Analytics'}
             </p>

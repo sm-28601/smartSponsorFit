@@ -83,7 +83,7 @@ export default function BrandDashboardPage({ onNavigate }: BrandDashboardPagePro
       {/* Side Navigation - Brand Variant */}
       <nav className="fixed left-0 top-0 h-full w-sidebar-width bg-surface border-r-4 border-black flex flex-col gap-4 py-8 z-50">
         <div className="px-8 mb-8">
-          <h1 className="font-display text-3xl font-black text-primary uppercase tracking-tighter italic" style={{ WebkitTextStroke: '1px black' }}>CreatorFit</h1>
+          <h1 className="font-display text-3xl font-black text-primary uppercase tracking-tighter italic" style={{ WebkitTextStroke: '1px black' }}>SmartSponsorFit</h1>
           <div className="inline-block bg-black text-primary text-[10px] px-2 py-0.5 font-bold mt-1">HACK_V.01</div>
         </div>
         <div className="flex-1 px-4 space-y-2">

@@ -15,7 +15,7 @@ export default function SettingsPage({ onNavigate, onNewAnalysis }: SettingsPage
   const [activeTab, setActiveTab] = useState<Tab>('profile');
   const [displayName, setDisplayName] = useState('Alex Rivera');
   const [bio, setBio] = useState('Digital architect specialising in performance-driven creative strategy for AI-driven ecosystems.');
-  const [email, setEmail] = useState('alex@creatorfit.ai');
+  const [email, setEmail] = useState('alex@smartsponsorfit.ai');
   const [location, setLocation] = useState('Berlin, Germany');
   const [saved, setSaved] = useState(false);
   const [aiPreferences, setAiPreferences] = useState({

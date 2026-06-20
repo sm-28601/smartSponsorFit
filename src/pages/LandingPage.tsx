@@ -36,7 +36,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
           <div className="w-10 h-10 border-2 border-on-surface-alt bg-primary flex items-center justify-center">
             <Sparkles className="text-on-primary font-bold" size={20} />
           </div>
-          <span className="font-display text-h2 text-on-surface-alt uppercase tracking-tighter">CreatorFit AI</span>
+          <span className="font-display text-h2 text-on-surface-alt uppercase tracking-tighter">SmartSponsorFit</span>
         </div>
         <div className="hidden md:flex items-center gap-10">
           {navItems.map((item) => (
@@ -341,7 +341,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
               <div className="w-12 h-12 border-2 border-on-surface-alt bg-primary flex items-center justify-center">
                 <Sparkles className="text-on-primary font-bold" size={20} />
               </div>
-              <span className="font-display text-3xl text-on-surface-alt uppercase italic font-black">CreatorFit AI</span>
+              <span className="font-display text-3xl text-on-surface-alt uppercase italic font-black">SmartSponsorFit</span>
             </div>
             <p className="font-body-md text-on-surface-variant mb-10">Building the next generation of marketing intelligence through cutting-edge AI and precision data analytics.</p>
             <div className="flex gap-6">
@@ -381,7 +381,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
           </div>
         </div>
         <div className="container-max mx-auto px-margin-desktop mt-24 pt-10 border-t-2 border-on-surface-alt flex flex-col md:flex-row justify-between items-center gap-8">
-          <p className="font-body-sm text-on-surface-variant font-bold uppercase">&copy; 2024 CREATORFIT AI // ALL RIGHTS RESERVED.</p>
+          <p className="font-body-sm text-on-surface-variant font-bold uppercase">&copy; 2024 SMARTSPONSORFIT // ALL RIGHTS RESERVED.</p>
           <div className="flex items-center gap-3 px-4 py-2 border-2 border-on-surface-alt bg-surface">
             <span className="w-2 h-2 rounded-full bg-[#52ff00] animate-pulse" />
             <span className="font-label-caps text-[10px] tracking-widest text-on-surface-alt">ALL SYSTEMS OPERATIONAL</span>

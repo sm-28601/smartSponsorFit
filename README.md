@@ -1,6 +1,6 @@
-# CreatorFit AI
+# SmartSponsorFit
 
-CreatorFit AI is a prototype influencer-brand matching platform built with React, TypeScript, Vite, and Tailwind CSS.
+SmartSponsorFit is a prototype influencer-brand matching platform built with React, TypeScript, Vite, and Tailwind CSS.
 
 It demonstrates an AI-inspired scoring workflow for matching brands with creators based on audience overlap, tone alignment, engagement signals, and campaign fit.
 

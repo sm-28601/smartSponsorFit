@@ -79,13 +79,13 @@ export default function ExportsPage({ onNavigate, onNewAnalysis }: ExportsPagePr
                   <div className="flex flex-col md:flex-row gap-6 mb-8">
                     <img
                       src="https://lh3.googleusercontent.com/aida-public/AB6AXuDznBBNh6ORAXUjHRc_iPYFlEcLMP8VLJHW5gY9IaURTyA5dZd3sYyAUZTCI3sBIi1ftgjL_knDIGpzjXVBmtLG3TM6Qd8yq6I_hqwnypYpMwTsgfh8N-b2b1DtQtB4oxnG98Do_zsO1aAvxpNOLQd5N3GWtLeVtRdkIDTXkqsxl1YQrB0mfpTKtZ1ywBo1Ow0sFNFll9-7HxFCpmSVUXICXZC3VXOUhRgFb4LB1-LPsWu2xwLmHKcpX1AzOMUaQX2kxXkApsFWM88d"
-                      alt="Elena Vance"
+                      alt="Alex Rivera"
                       className="w-24 h-24 rounded-2xl object-cover border-[3px] border-black shadow-brutal flex-shrink-0"
                     />
                     <div className="flex-1">
                       <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
                         <div>
-                          <h2 className="font-display text-3xl font-black text-white">Elena Vance</h2>
+                          <h2 className="font-display text-3xl font-black text-white">Alex Rivera</h2>
                           <p className="text-primary font-black uppercase tracking-widest text-sm mt-1">TECH & AI STORYTELLER</p>
                           <div className="flex items-center gap-4 mt-3 text-on-surface/50 text-sm font-bold">
                             <span className="flex items-center gap-1"><MapPin size={13} /> Austin, TX</span>
@@ -282,7 +282,7 @@ export default function ExportsPage({ onNavigate, onNewAnalysis }: ExportsPagePr
               <div className="neo-card bg-surface-container p-7">
                 <span className="text-[10px] font-black bg-yellow-500/20 text-yellow-400 px-2 py-1 rounded-full border border-yellow-400/30">UPGRADE</span>
                 <h3 className="font-black text-white text-xl mt-4 mb-2">Unlock Custom Branding</h3>
-                <p className="text-on-surface/50 text-sm leading-relaxed mb-4">Remove the CreatorFit logo and add your own custom agency branding to all exports.</p>
+                <p className="text-on-surface/50 text-sm leading-relaxed mb-4">Remove the SmartSponsorFit logo and add your own custom agency branding to all exports.</p>
                 <button className="text-primary font-black text-sm flex items-center gap-1 hover:gap-2 transition-all">
                   View Pro Plans →
                 </button>
